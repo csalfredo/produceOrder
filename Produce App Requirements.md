@@ -8,6 +8,8 @@ This is a web app (single-page application) which will have a few main screens:
 2.  Confirm Order
 3.  Thank You
 
+The app will be built using Next.js, NextUI and TailwindCSS.
+
 ## Create Purchase Order
 
 On this screen, we want users to be able to use a search box to find items to add to the purchase order.
