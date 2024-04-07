@@ -15,6 +15,7 @@ export default function produceorder() {
 
     const getCurrentProduceValue=()=>{
       console.log(value);
+      setValue(null);
     }
 
   return (
