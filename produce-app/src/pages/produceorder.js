@@ -73,7 +73,10 @@ export default function produceorder() {
                   {
                     userCurrentOrder.map((item,index)=>(
                       <div key={index}>
-                        <p>{index+1} .</p> 
+                        <div className='border border-solid border-t-4 border-l-1 border-b-4 border-r-1 border-black w-7 flex justify-center mt-2 rounded-full'>
+                          <p>{index+1}</p> 
+                        </div>
+
                         <div className='grid grid-rows-1 lg:flex justify-start'>
                           <div className='lg:w-2/12 flex justify-center sm:w-6/12'>
                             <Images src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
