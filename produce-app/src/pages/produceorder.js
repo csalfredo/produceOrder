@@ -43,6 +43,29 @@ export default function produceorder() {
       // setValue(null);
     }
 
+    const increaseProduceItem=(e)=>{
+      setValueQty(valueQty+1);
+    }
+
+    const deleteFromProduceOrderList=()=>{
+      console.log("deleteFromProduceOrderList, and valueQty is ", valueQty);
+
+    }
+
+    const deleteQty=(e,id)=>{
+      console.log(e.currentTarget);
+      console.log("Current id is ", id);
+      console.log("deleteQty is ", valueQty);
+
+      if (valueQty===1) {
+        console.log("At this point valueQty should be ZERO, ", valueQty);
+        deleteFromProduceOrderList();
+      }      
+
+      setValueQty(valueQty-1);
+
+    }
+
   return (
 
     <div>
@@ -79,7 +102,7 @@ export default function produceorder() {
 
                         <div className='grid grid-rows-1 lg:flex justify-start'>
                           <div className='lg:w-2/12 flex justify-center sm:w-6/12'>
-                            <Images src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
+                            <Images alt={item.name} src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
                           </div> 
                           <div className='grid grid-rows-1 border border-orange-400 lg:inline-block lg:w-11/12 sm:w-full'>
                               <div className='grid grid-rows-1'>
@@ -99,7 +122,7 @@ export default function produceorder() {
                       <div className=' flex justify-between border border-red-500 w-full'>
                                       <div className='inline-block border border-blue-400'>
                                         <div className='inline-block'>
-                                          <Button variant='outlined' color='primary' size='small'><Images src={trashDelete}/></Button>
+                                          <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id)}><Images alt={item.name} src={trashDelete}/></Button>
                                         </div>
                                       <div className='inline-block w-1/6 ml-2'>
                                         <Stack spacing={4}>
@@ -109,7 +132,7 @@ export default function produceorder() {
                                         </Stack>
                                       </div>
                                       <div className='inline-block ml-2.5'>
-                                        <Button className='w-1/12' variant='outlined' color='primary' size='small'>+</Button>
+                                        <Button className='w-1/12' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e)}>+</Button>
                                       </div>
                                     </div>
                                     
