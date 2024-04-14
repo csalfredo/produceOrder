@@ -136,7 +136,7 @@ export default function produceorder() {
     <div>
       <div className="flex justify-center">
         <div>
-          <h1 className='text-2xl font-bold'>PRODUCE ORDER</h1>
+          <h1 className='text-2xl font-bold font-instrument'>PRODUCE ORDER</h1>
         </div>
     </div>
         <div className='flex justify-center mt-4'>
@@ -231,6 +231,7 @@ export default function produceorder() {
                             userCurrentOrder={userCurrentOrder}
                             setUserCurrentOrder={setUserCurrentOrder}
                             stock={item.stock}
+                            count={index}
                             />
                         </div>
                       )
@@ -247,7 +248,7 @@ export default function produceorder() {
               </div>
             </div>
             <div className='ml-10'>
-              <p>CURRENT BALANCE:</p>
+              <p className='font-bold font-instrument'>CURRENT BALANCE:</p>
             </div>
           </div>
         </div>
