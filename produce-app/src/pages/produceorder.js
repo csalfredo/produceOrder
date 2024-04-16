@@ -149,77 +149,86 @@ export default function produceorder() {
               value={value}
               onChange={(e, newValue)=>setProduceValue(newValue)}
             />
-          </Stack>
+          </Stack>.
         </div>
           <div className='flex justify-center mt-2'>
             <Button onClick={(e)=>getCurrentProduceValue(e)} variant='outlined'>Enter</Button>
           </div>
         <div className='flex justify-center'>
           <div className='grid grid-rows-1 border border-gray-400 mt-8 w-10/12 rounded'>
-            <div className='grid grid-rows-1 w-11/12 border border-gray-400 sm:mt-4 ml-6 mb-10 md:mb-12 lg:mb-4 rounded lg:ml-10'>
+            <div className='grid grid-rows-1 mt-2  w-11/12 sm:mt-4 ml-4 mb-10 md:mb-12 lg:mb-4 rounded lg:ml-10'>
               <div className='p-4'>
                   {userCurrentOrder.map((item,index)=>
                       isSmallScreen===false ? (
                       <div key={item.id}>
-                        <div className='border border-solid border-t-4 border-l-1.5 border-b-4 border-r-1.5 border-black w-7 flex justify-center mt-2 rounded-full'>
-                          <p>{index+1}</p> 
-                        </div>
-
-                        <div className='grid grid-rows-1 lg:flex justify-start'>
-                          <div className='lg:w-2/12 flex justify-center sm:w-6/12'>
-                            <Images alt={item.name} src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
-                          </div> 
-                          <div className='grid grid-rows-1 border border-orange-400 lg:inline-block lg:w-11/12 sm:w-full'>
-                              <div className='grid grid-rows-1'>
-                                <div className='flex justify-end mb-2'>
-                                  {/* <p className='font-bold text-xs/[17px] mb-1 inline-block'>IN STOCK:</p> */}
-                                  
-                                  <p className='text-orange-500 inline-block font-bebas text-sm/[17px] font-bold'>  {item.stock===false && "OUT OF STOCK"}</p>
-                                </div>
-                                <div className='grid grid-rows-1'>
-                                  <h1 className='uppercase font-bold text-xl mt-10'>{item.name}</h1>
-                                </div>
+                        <div className='border-b-1 border border-black rounded-lg'>
+                            <div className='border border-black w-7 flex justify-center mt-2 rounded-full'>
+                              <p>{index+1}</p> 
+                            </div>
+                            <div className='grid grid-rows-1 lg:flex justify-start'>
+                              <div className='lg:w-2/12 flex justify-center sm:w-6/12'>
+                                <Images alt={item.name} src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
+                              </div> 
+                              <div className='grid grid-rows-1 lg:inline-block lg:w-11/12 sm:w-full'>
+                                  <div className='grid grid-rows-1'>
+                                    <div className='flex justify-end mb-2'>
+                                      {/* <p className='font-bold text-xs/[17px] mb-1 inline-block'>IN STOCK:</p> */}
+                                      
+                                      <p className='text-orange-500 inline-block font-bebas text-sm/[17px] font-bold mr-2'>  {item.stock===false && "OUT OF STOCK"}</p>
+                                    </div>
+                                    <div className='grid grid-rows-1'>
+                                      <h1 className='uppercase font-bold text-xl mt-10 font-instrument'>{item.name}</h1>
+                                    </div>
+                                  </div>
                               </div>
+                            </div>
+                          <div className=' flex justify-between w-full'>
+                              <div className='inline-block mt-2'>
+                                <div className='inline-block'>
+                                  <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id)}><Images alt={item.name} src={trashDelete}/></Button>
+                                </div>
+                              <div className='inline-block w-1/6 ml-2'>
+                                <Stack spacing={4}>
+                                  <Stack direction='row' spacing={2}>
+                                      <TextField 
+                                        sx={{
+                                          '& .MuiInputBase-input': { // Targeting the input element directly
+                                            fontSize: '0.8rem', // Decreasing the font size
+                                            height:'13px'
+                                          }
+                                        }} 
+                                        label='QTY' 
+                                        size='small' 
+                                        value={item.Qty} onChange={e=>setValueQty(e.target.value) }/>
+                                  </Stack>
+                                </Stack>
+                              </div>
+                              <div className='inline-block ml-2.5'>
+                                <Button className='w-1/12 font-bold text-black text-base' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id)}>+</Button>
+                              </div>
+                            </div>
+                            
+                              <div className='lg:inline-block ml-8'>
+                                <p className='lg:font-bold text-xs/[17px] mb-1 mr-2 inline-block font-bold font-sans'>CASE COST:</p>
+                                <p className='text-xs/[17px] inline-block'> ${item.case_cost}</p>
+                              </div>
+                            
+                            
+                              <div className='inline-block ml-6'>
+                                <p className='font-bold text-xs/[17px] mb-1 mr-2 inline-block font-sans'>CASE SIZE:</p>
+                                <p className='text-xs/[17px] inline-block'> {item.case_size}</p>
+                              </div>
+                            
+                          
+                            <div className='inline-block'>
+                              <p className='text-red-500 font-bold text-xs/[17px] mb-1 mr-1 inline-block'>PROMO PRICE: </p>
+                              <p className='text-xs/[17px] inline-block mr-2'> ${item.promo_price}</p>
+                            </div>
                           </div>
                         </div>
 
-                      
-                      <div className=' flex justify-between border border-red-500 w-full'>
-                                      <div className='inline-block border border-blue-400'>
-                                        <div className='inline-block'>
-                                          <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id)}><Images alt={item.name} src={trashDelete}/></Button>
-                                        </div>
-                                      <div className='inline-block w-1/6 ml-2'>
-                                        <Stack spacing={4}>
-                                          <Stack direction='row' spacing={2}>
-                                              <TextField label='QTY' size='small' value={item.Qty} onChange={e=>setValueQty(e.target.value) }/>
-                                          </Stack>
-                                        </Stack>
-                                      </div>
-                                      <div className='inline-block ml-2.5'>
-                                        <Button className='w-1/12' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id)}>+</Button>
-                                      </div>
-                                    </div>
-                                    
-                                      <div className='lg:inline-block border border-green-700 ml-8'>
-                                        <p className='lg:font-bold text-xs/[17px] mb-1 inline-block'>CASE COST:</p>
-                                        <p className='text-xs/[17px] inline-block'> ${item.case_cost}</p>
-                                      </div>
-                                    
-                                    
-                                      <div className='border border-blue-800 inline-block ml-6'>
-                                        <p className='font-bold text-xs/[17px] mb-1 inline-block'>CASE SIZE:</p>
-                                        <p className='text-xs/[17px] inline-block'> {item.case_size}</p>
-                                      </div>
-                                    
-                                  
-                                        <div className='inline-block'>
-                                          <p className='text-red-500 font-bold text-xs/[17px] mb-1 inline-block'>PROMO PRICE: </p>
-                                          <p className='text-xs/[17px] inline-block'> ${item.promo_price}</p>
-                                        </div>
-                                </div>
-                      </div>
-                      ) : (
+                  </div>
+                      ) : (    
                         <div key={item.id}>
                             <Responsiveproduceorder 
                             id={item.id}
@@ -232,6 +241,13 @@ export default function produceorder() {
                             setUserCurrentOrder={setUserCurrentOrder}
                             stock={item.stock}
                             count={index}
+                            Quantity={item.Qty}
+                            value={value}
+                            setValue={setValue}
+                            valueQty={valueQty}
+                            setValueQty={setValueQty}
+                            increaseProduceItem={increaseProduceItem}
+                            deleteQty={deleteQty}
                             />
                         </div>
                       )
@@ -244,10 +260,10 @@ export default function produceorder() {
             <div className='grid grid-rows-1'>
               <div className='flex justify-center'>
                 <div></div>
-                <Button className='sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined'>Confirm Order</Button>
+                <Button className='text-black sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined'>Confirm Order</Button>
               </div>
             </div>
-            <div className='ml-10'>
+            <div className='ml-10 mt-2'>
               <p className='font-bold font-instrument'>CURRENT BALANCE:</p>
             </div>
           </div>

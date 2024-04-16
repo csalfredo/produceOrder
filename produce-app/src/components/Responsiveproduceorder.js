@@ -2,9 +2,10 @@ import React from 'react'
 import Images from 'next/image'
 import { useState, useEffect } from 'react'
 import { Stack, Autocomplete, TextField, Button } from "@mui/material"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
-export default function Responsiveproduceorder({id,produce_name,case_cost,case_size,promo,produce_image,userCurrentOrder,setUserCurrentOrder,stock,count}) {
-
+export default function Responsiveproduceorder({id,produce_name,case_cost,case_size,promo,produce_image,userCurrentOrder,setUserCurrentOrder,stock,count,Quantity,value,setValue,valueQty, setValueQty,increaseProduceItem,deleteQty}) {
 
     return(
         <div className='grid grid-rows-1 border border-black rounded'>
@@ -42,6 +43,55 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
             </div>
             <div>
                 <p className='text-center text-orange-500 font-bebas text-sm/[17px] font-bold'>  {stock===false && "OUT OF STOCK"}</p>
+            </div>
+
+            <div className='flex justify-center border-t-1 border border-black w-full'>
+                <div className='flex justify-center w-8/12 mt-2'>
+                    <div className='inline-block'>
+                      <Button
+                            sx={{
+                                fontSize: '0.75rem', // smaller font size
+                                padding: '4px 10px', // custom padding
+                                minWidth: '42px', // minimum width
+                                height: '30px' // specific height
+                              }}
+                        variant='outlined' 
+                        color='primary' 
+                        size='small' 
+                        onClick={(e)=>deleteQty(e,id)}>
+                        <FontAwesomeIcon icon={faTrash} className="text-black text-sm p-1" />
+                    </Button>
+                    </div>
+                        <div className='inline-block w-3/12'>
+                            <Stack spacing={4}>
+                                <Stack direction='row' spacing={2}>
+                                    <TextField
+                                          sx={{
+                                            '& .MuiInputBase-input': { // Targeting the input element directly
+                                              fontSize: '0.8rem', // Decreasing the font size
+                                              height:'13px'
+                                            }
+                                          }} 
+                                        className='bg-white' label='QY' size='small' value={Quantity} onChange={e=>setValueQty(e.target.value) }/>
+                                </Stack>
+                            </Stack>
+                        </div>
+                        <div className='inline-block'>
+                            <Button className='text-black text-lg' 
+                                    sx={{
+                                        fontSize: '0.75rem', // smaller font size
+                                        padding: '4px 10px', // custom padding
+                                        minWidth: '42px', // minimum width
+                                        height: '30px' // specific height
+                                        }}
+                                variant='outlined' 
+                                color='primary' 
+                                size='small' 
+                                onClick={e=>increaseProduceItem(e,Quantity,id)}>
+                                +
+                            </Button>
+                        </div>
+                    </div>            
             </div>
 
         </div>
