@@ -14,23 +14,27 @@ import strawberries from "../components/images/strawberries.png"
 
 
 import { useState, useEffect } from 'react'
+import { toggle } from '@nextui-org/react'
 
 // import {  Autocomplete,  AutocompleteSection,  AutocompleteItem} from "@nextui-org/autocomplete";
 export default function produceorder() {
-    const [produceListItems, setProduceListItems] = useState([{id:0, name:"apple gala", product_code:"110", inventory:"40", case_cost:"27.41", case_size:"40 lbs", promo_price:"17.49", stock:true, produce_Image: gala_apple, Qty:1},
-                            {id:1, name:"apple fuji", product_code:"108", inventory:"20", case_cost:"27.41", case_size:"40 lbs", promo_price:"0", stock:true, produce_Image: fuji_apple, Qty:1},
-                            {id:2, name:"apple honeycrisp", product_code:"111", inventory:"80", case_cost:"27.41", case_size:"40 lbs", promo_price:"12.49", stock:true, produce_Image: honey_crisp, Qty:1},
-                            {id:3, name:"apple granny smith", product_code:"114", inventory:"10", case_cost:"49.50", case_size:"40 lbs", promo_price:"0", stock:false, produce_Image: granny_smith, Qty:1},
-                            {id:4, name:"oranges", product_code:"350", inventory:"22", case_cost:"29.41", case_size:"38 lbs", promo_price:"0", stock:true, produce_Image: oranges_navel, Qty:1},
-                            {id:5, name:"lemons", product_code:"266", inventory:"8", case_cost:"11.19", case_size:"75 units", promo_price:"0", stock:false, produce_Image: lemons, Qty:1},
-                            {id:6, name:"limes", product_code:"278", inventory:"65", case_cost:"51.49", case_size:"230 units", promo_price:"47.65", stock:true, produce_Image: limes, Qty:1},
-                            {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:"22.99", case_size:"8 units", promo_price:"8.49", stock:true, produce_Image: strawberries, Qty:1}]);
+    const [produceListItems, setProduceListItems] = useState([{id:0, name:"apple gala", product_code:"110", inventory:"40", case_cost:27.41, case_size:"40 lbs", promo_price:17.49, stock:true, produce_Image: gala_apple, Qty:1},
+                            {id:1, name:"apple fuji", product_code:"108", inventory:"20", case_cost:27.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: fuji_apple, Qty:1},
+                            {id:2, name:"apple honeycrisp", product_code:"111", inventory:"80", case_cost:27.41, case_size:"40 lbs", promo_price:12.49, stock:true, produce_Image: honey_crisp, Qty:1},
+                            {id:3, name:"apple granny smith", product_code:"114", inventory:"10", case_cost:49.50, case_size:"40 lbs", promo_price:0, stock:false, produce_Image: granny_smith, Qty:1},
+                            {id:4, name:"oranges", product_code:"350", inventory:"22", case_cost:29.41, case_size:"38 lbs", promo_price:0, stock:true, produce_Image: oranges_navel, Qty:1},
+                            {id:5, name:"lemons", product_code:"266", inventory:"8", case_cost:11.19, case_size:"75 units", promo_price:0, stock:false, produce_Image: lemons, Qty:1},
+                            {id:6, name:"limes", product_code:"278", inventory:"65", case_cost:51.49, case_size:"230 units", promo_price:0, stock:true, produce_Image: limes, Qty:1},
+                            {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:22.99, case_size:"8 units", promo_price:0, stock:true, produce_Image: strawberries, Qty:1}]);
     const [userCurrentOrder, setUserCurrentOrder]=useState([]);
     const [value, setValue]=useState(null);
     const [valueQty, setValueQty]=useState(1);
     const [isSmallScreen, setIsSmallScreen]=useState(false)
     const [isMediumScreen, setIsMediumScreen]=useState(false)
     const [isLargeScreen, setIsLargeScreen]=useState(false)
+    const [currentBalance, setCurrentBalance]=useState([])
+    const [totalBalance,setTotalBalance]=useState(parseFloat(0.00).toFixed(2))
+    const [enterButton, setEnterButton]=useState(false)
 
     useEffect(()=>{
       const handleResize=()=>{
@@ -57,6 +61,8 @@ export default function produceorder() {
     const getCurrentProduceValue=()=>{
       console.log(value);
 
+      //TODO:CHANGE ENTER TO TRUE
+      toggleEnterButton()
       setUserCurrentOrder([...userCurrentOrder,value]);
 
       // setUserCurrentOrder(currentArray=>[...currentArray,value]);
@@ -80,10 +86,16 @@ export default function produceorder() {
       return locationFound;
     }
 
-    const increaseProduceItem=(e,Quantity, id)=>{
+    const toggleEnterButton=()=>{
+      setEnterButton(!enterButton)
+    }
+
+    const increaseProduceItem=(e,Quantity, id, case_cost, promoPrice,stock,index)=>{
       let produceItemLocation;
       let currentQty;
+      
 
+      
       //TODO:First find the produce item by using the id
       produceItemLocation=findProduceItem(id)
       //TODO:Get the current value of the Quantity
@@ -98,10 +110,13 @@ export default function produceorder() {
         updateItems[produceItemLocation].Qty=currentQty;
         // setUserCurrentOrder(updateItems);
         setProduceListItems(updateItems);
+        console.log(updateItems[id].Qty)
+        getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
+        
     }
 
 
-    const deleteQty=(e,id)=>{
+    const deleteQty=(e,id,Quantity,case_cost,promoPrice,stock,index)=>{
       let produceItemLocation;
       let currentQty;
       let newOrderList;
@@ -115,10 +130,15 @@ export default function produceorder() {
       //TODO:Decrease the value of Quantity
       currentQty=currentQty-1
       if (currentQty===0) {
+        const updateItems=[...produceListItems];
+        updateItems[produceItemLocation].Qty=currentQty;
+        setProduceListItems(updateItems);
         // console.log("At this point valueQty should be ZERO, ", valueQty);
         setUserCurrentOrder(currentItems=>{
           newOrderProduceList=currentItems.filter(item=>item.id !== id);
           console.log("updated items:", newOrderProduceList)
+          getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
+
           return newOrderProduceList;
         })
       }else{
@@ -127,13 +147,108 @@ export default function produceorder() {
           const updateItems=[...produceListItems];
           updateItems[produceItemLocation].Qty=currentQty;
           setProduceListItems(updateItems);
+          getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
       }
 
+
+  }
+  const getTotalBalance=(Balance)=>{
+
+    console.log(Balance)
+    setCurrentBalance(Balance)
+    console.log(currentBalance)
+
+
+    let tempValueCost=0
+    let currentValue=0
+    let index=0
+
+    while (index < Balance.length) {
+      console.log("index is ", index)
+  
+      if (Balance[index] !==undefined) {
+        console.log(Balance[index])
+
+        currentValue=Balance[index];
+
+        currentValue=currentValue+tempValueCost
+        tempValueCost=currentValue
+      }
+      index++;
+    }//end of while loop
+
+    console.log("currentValue is ", parseFloat(currentValue).toFixed(2))
+
+
+    setTotalBalance(currentValue)
+
+
+  }
+
+  const getCurrentBalance=(Qty,caseCost,promoPrice,stock,location,id)=>{
+
+   location=findProduceItem(id)
+
+    console.log("Quantity is ", Qty)
+    console.log("caseCost is ", caseCost)
+    console.log("stock is ", stock)
+    console.log("location is ", location)
+
+    let newAmount;
+    let currentValue;
+    let Balance;
+    let currentTotal;
+    
+
+    console.log(currentBalance)
+    
+    currentValue=currentBalance[location];
+    
+    console.log("currentValue is ", currentValue);
+
+    Balance=[...currentBalance];
+
+    if (stock===true)
+    {
+        if(promoPrice===0)
+        {
+
+            console.log("using the caseCost value, and Qty is ", Qty)
+            newAmount=(Qty*caseCost);
+            Balance[location]=newAmount
+            // setCurrentBalance(Balance)
+            getTotalBalance(Balance)
+
+        }  
+        else{
+         
+            console.log("Using the Promo value, and Qty is ", Qty)
+            newAmount=(Qty*promoPrice);
+            console.log("newAmount is ", newAmount)
+            Balance[location]=newAmount
+            console.log(Balance)
+            // setCurrentBalance(Balance)
+            console.log(currentBalance);
+            // setTotalBalance(parseFloat(newAmount).toFixed(2)) 
+            getTotalBalance(Balance)
+      
+        }  
+    }
+    else{
+      console.log("THE ITEM IS OUT OF STOCK")
+    }
+
+    
+        //TODO:SET ENTER BUTTON TO FALSE
+        toggleEnterButton();
+        
+        console.log("currentTotal is ", currentBalance)
   }
 
   return (
 
     <div>
+      {console.log("currentBalance is ", currentBalance)}
       <div className="flex justify-center">
         <div>
           <h1 className='text-2xl font-bold font-instrument'>PRODUCE ORDER</h1>
@@ -161,6 +276,7 @@ export default function produceorder() {
                   {userCurrentOrder.map((item,index)=>
                       isSmallScreen===false ? (
                       <div key={item.id}>
+                        {enterButton && getCurrentBalance(item.Qty,item.case_cost,item.promo_price,item.stock,index, item.id)}
                         <div className='border-b-1 border border-black rounded-lg'>
                             <div className='border border-black w-7 flex justify-center mt-2 rounded-full'>
                               <p>{index+1}</p> 
@@ -185,7 +301,7 @@ export default function produceorder() {
                           <div className=' flex justify-between w-full'>
                               <div className='inline-block mt-2'>
                                 <div className='inline-block'>
-                                  <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id)}><Images alt={item.name} src={trashDelete}/></Button>
+                                  <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id,item.Qty,item.case_cost,item.promo_price,item.stock,index)}><Images alt={item.name} src={trashDelete}/></Button>
                                 </div>
                               <div className='inline-block w-1/6 ml-2'>
                                 <Stack spacing={4}>
@@ -204,7 +320,7 @@ export default function produceorder() {
                                 </Stack>
                               </div>
                               <div className='inline-block ml-2.5'>
-                                <Button className='w-1/12 font-bold text-black text-base' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id)}>+</Button>
+                                <Button className='w-1/12 font-bold text-black text-base' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id,item.case_cost,item.promo_price,item.stock,index)}>+</Button>
                               </div>
                             </div>
                             
@@ -251,8 +367,6 @@ export default function produceorder() {
                             />
                         </div>
                       )
-                    
-                    
                   )
                   }
               </div>
@@ -263,9 +377,11 @@ export default function produceorder() {
                 <Button className='text-black sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined'>Confirm Order</Button>
               </div>
             </div>
-            <div className='ml-10 mt-2'>
-              <p className='font-bold font-instrument'>CURRENT BALANCE:</p>
+            <div className='inline-block ml-10'>
+              <p className='inline-block font-bold font-instrument'>CURRENT BALANCE: $</p>
+              <p className='inline-block'>{totalBalance}</p>
             </div>
+            <div className='mt-4'></div>
           </div>
         </div>
 

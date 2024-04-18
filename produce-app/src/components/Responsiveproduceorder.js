@@ -87,7 +87,7 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
                                 variant='outlined' 
                                 color='primary' 
                                 size='small' 
-                                onClick={e=>increaseProduceItem(e,Quantity,id)}>
+                                onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock)}>
                                 +
                             </Button>
                         </div>
