@@ -11,6 +11,16 @@ import oranges_navel from "../components/images/navel_oranges.png"
 import lemons from "../components/images/lemons.png"
 import limes from "../components/images/limes.png"
 import strawberries from "../components/images/strawberries.png"
+import bananas from "../components/images/bananas.png"
+import blueberries from "../components/images/blueberries.png"
+import cabbage from "../components/images/cabbage.png"
+import cauliflower from "../components/images/cauliflower.png"
+import green_grapes from "../components/images/green_grapes.png"
+import raspberries from "../components/images/raspberries.png"
+import red_grapes from "../components/images/red_grapes.png"
+import roma from "../components/images/roma.png"
+import tomato from "../components/images/tomato.png"
+import watermelon from "../components/images/watermelon.png"
 
 
 import { useState, useEffect } from 'react'
@@ -25,7 +35,17 @@ export default function produceorder() {
                             {id:4, name:"oranges", product_code:"350", inventory:"22", case_cost:29.41, case_size:"38 lbs", promo_price:0, stock:true, produce_Image: oranges_navel, Qty:1},
                             {id:5, name:"lemons", product_code:"266", inventory:"8", case_cost:11.19, case_size:"75 units", promo_price:0, stock:false, produce_Image: lemons, Qty:1},
                             {id:6, name:"limes", product_code:"278", inventory:"65", case_cost:51.49, case_size:"230 units", promo_price:0, stock:true, produce_Image: limes, Qty:1},
-                            {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:22.99, case_size:"8 units", promo_price:0, stock:true, produce_Image: strawberries, Qty:1}]);
+                            {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:22.99, case_size:"8 units", promo_price:0, stock:true, produce_Image: strawberries, Qty:1},
+                            {id:8, name:"bananas", product_code:"142", inventory:"445", case_cost:40.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: bananas, Qty:1},
+                            {id:9, name:"blueberries", product_code:"166", inventory:"110", case_cost:21.41, case_size:"10 units", promo_price:11.00, stock:true, produce_Image: blueberries, Qty:1},
+                            {id:10, name:"cabbage", product_code:"178", inventory:"12", case_cost:16.00, case_size:"45 lbs", promo_price:0, stock:false, produce_Image: cabbage, Qty:1},
+                            {id:11, name:"green grapes", product_code:"248", inventory:"55", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: green_grapes, Qty:1},
+                            {id:12, name:"raspberries", product_code:"167", inventory:"10", case_cost:25.99, case_size:"10 unit s", promo_price:0, stock:false, produce_Image: raspberries, Qty:1},
+                            {id:13, name:"red grapes", product_code:"250", inventory:"50", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: red_grapes, Qty:1},
+                            {id:14, name:"roma", product_code:"482", inventory:"100", case_cost:25.49, case_size:"25 lbs", promo_price:15.00, stock:true, produce_Image: roma, Qty:1},
+                            {id:15, name:"tomato", product_code:"478", inventory:"40", case_cost:20.49, case_size:"15 lbs", promo_price:0, stock:true, produce_Image: tomato, Qty:1},
+                            {id:16, name:"watermelon", product_code:"304", inventory:"40 bins", case_cost:200.15, case_size:"120 units", promo_price:0, stock:true, produce_Image: watermelon, Qty:1},
+                          ]);
     const [userCurrentOrder, setUserCurrentOrder]=useState([]);
     const [value, setValue]=useState(null);
     const [valueQty, setValueQty]=useState(1);

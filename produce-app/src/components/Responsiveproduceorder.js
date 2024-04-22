@@ -124,6 +124,7 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
                                         minWidth: '42px', // minimum width
                                         height: '30px' // specific height
                                         }}
+                                    disabled={true}
                                     variant='outlined' 
                                     color='primary' 
                                     size='small' 
