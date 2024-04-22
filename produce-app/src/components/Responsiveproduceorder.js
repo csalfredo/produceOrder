@@ -49,19 +49,40 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
             <div className='flex justify-center border-t-1 border border-black w-full'>
                 <div className='flex justify-center w-8/12 mt-2'>
                     <div className='inline-block'>
-                      <Button
+                    {stock===true ?
+                        <Button
                             sx={{
                                 fontSize: '0.75rem', // smaller font size
                                 padding: '4px 10px', // custom padding
                                 minWidth: '42px', // minimum width
                                 height: '30px' // specific height
                               }}
-                        variant='outlined' 
-                        color='primary' 
-                        size='small' 
-                        onClick={(e)=>deleteQty(e,id,Quantity,case_cost,promo,stock,index)}>
-                        <FontAwesomeIcon icon={faTrash} className="text-black text-sm p-1" />
-                    </Button>
+                            variant='outlined' 
+                            color='primary' 
+                            size='small' 
+                            onClick={(e)=>deleteQty(e,id,Quantity,case_cost,promo,stock,index)}>
+                            <FontAwesomeIcon icon={faTrash} className="text-black text-sm p-1" />
+                        </Button>
+
+                        :
+
+                        <Button className='bg-gray-200 opacity-50 cursor-not-allowed'
+                            sx={{
+                                fontSize: '0.75rem', // smaller font size
+                                padding: '4px 10px', // custom padding
+                                minWidth: '42px', // minimum width
+                                height: '30px' // specific height
+                              }}
+                            disabled={true}
+                            variant='outlined' 
+                            color='primary' 
+                            size='small' 
+                            onClick={(e)=>deleteQty(e,id,Quantity,case_cost,promo,stock,index)}>
+                            <FontAwesomeIcon icon={faTrash} className="text-black text-sm p-1" />
+                        </Button> 
+                
+                    }
+
                     </div>
                         <div className='inline-block w-3/12'>
                             <Stack spacing={4}>
@@ -78,19 +99,39 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
                             </Stack>
                         </div>
                         <div className='inline-block'>
-                            <Button className='text-black text-lg' 
+                            {stock===true ?  
+                            
+                                <Button className='text-black text-lg' 
+                                        sx={{
+                                            fontSize: '0.75rem', // smaller font size
+                                            padding: '4px 10px', // custom padding
+                                            minWidth: '42px', // minimum width
+                                            height: '30px' // specific height
+                                            }}
+                                    variant='outlined' 
+                                    color='primary' 
+                                    size='small' 
+                                    onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock,index)}>
+                                    +
+                                </Button>
+
+                                :
+
+                                <Button className='text-black text-lg bg-gray-200 opacity-50 cursor-not-allowed'
                                     sx={{
                                         fontSize: '0.75rem', // smaller font size
                                         padding: '4px 10px', // custom padding
                                         minWidth: '42px', // minimum width
                                         height: '30px' // specific height
                                         }}
-                                variant='outlined' 
-                                color='primary' 
-                                size='small' 
-                                onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock,index)}>
-                                +
+                                    variant='outlined' 
+                                    color='primary' 
+                                    size='small' 
+                                    onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock,index)}>
+                                    +
                             </Button>
+                        }
+
                         </div>
                     </div>            
             </div>
