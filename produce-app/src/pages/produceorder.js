@@ -301,7 +301,11 @@ export default function produceorder() {
                           <div className=' flex justify-between w-full'>
                               <div className='inline-block mt-2'>
                                 <div className='inline-block'>
-                                  <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id,item.Qty,item.case_cost,item.promo_price,item.stock,index)}><Images alt={item.name} src={trashDelete}/></Button>
+                                  {item.stock===true ? 
+                                    <Button variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id,item.Qty,item.case_cost,item.promo_price,item.stock,index)}><Images alt={item.name} src={trashDelete}/></Button>
+                                  :
+                                  <Button className='bg-gray-200 opacity-50 cursor-not-allowed' disabled={true} variant='outlined' color='primary' size='small' onClick={(e)=>deleteQty(e,item.id,item.Qty,item.case_cost,item.promo_price,item.stock,index)}><Images alt={item.name} src={trashDelete}/></Button>
+                                }
                                 </div>
                               <div className='inline-block w-1/6 ml-2'>
                                 <Stack spacing={4}>
@@ -320,7 +324,11 @@ export default function produceorder() {
                                 </Stack>
                               </div>
                               <div className='inline-block ml-2.5'>
-                                <Button className='w-1/12 font-bold text-black text-base' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id,item.case_cost,item.promo_price,item.stock,index)}>+</Button>
+                                {item.stock===true ? 
+                                  <Button className='w-1/12 font-bold text-black text-base' variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id,item.case_cost,item.promo_price,item.stock,index)}>+</Button>
+                                  :
+                                  <Button className='bg-gray-200 opacity-50 cursor-not-allowed w-1/12 font-bold text-black text-base' disabled={true} variant='outlined' color='primary' size='small' onClick={e=>increaseProduceItem(e,item.Qty,item.id,item.case_cost,item.promo_price,item.stock,index)}>+</Button>
+                              }
                               </div>
                             </div>
                             
@@ -379,7 +387,7 @@ export default function produceorder() {
             </div>
             <div className='inline-block ml-10'>
               <p className='inline-block font-bold font-instrument'>CURRENT BALANCE: $</p>
-              <p className='inline-block'>{totalBalance}</p>
+              <p className='inline-block'>{parseFloat(totalBalance).toFixed(2)}</p>
             </div>
             <div className='mt-4'></div>
           </div>
