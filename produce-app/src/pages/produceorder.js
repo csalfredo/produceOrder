@@ -372,6 +372,9 @@ export default function produceorder() {
                             setValueQty={setValueQty}
                             increaseProduceItem={increaseProduceItem}
                             deleteQty={deleteQty}
+                            index={index}
+                            enterButton={enterButton}
+                            getCurrentBalance={getCurrentBalance}
                             />
                         </div>
                       )

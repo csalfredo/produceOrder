@@ -5,10 +5,11 @@ import { Stack, Autocomplete, TextField, Button } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
-export default function Responsiveproduceorder({id,produce_name,case_cost,case_size,promo,produce_image,userCurrentOrder,setUserCurrentOrder,stock,count,Quantity,value,setValue,valueQty, setValueQty,increaseProduceItem,deleteQty}) {
+export default function Responsiveproduceorder({id,produce_name,case_cost,case_size,promo,produce_image,userCurrentOrder,setUserCurrentOrder,stock,count,Quantity,value,setValue,valueQty, setValueQty,increaseProduceItem,deleteQty,index,enterButton,getCurrentBalance}) {
 
     return(
         <div className='grid grid-rows-1 border border-black rounded'>
+            {enterButton && getCurrentBalance(Quantity,case_cost,promo,stock,index,id)}
             <div className='border border-black rounded-full w-1/12 ml-1 mt-1'>
                <p className='text-center text-sm'>
                 {count+1}
@@ -58,7 +59,7 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
                         variant='outlined' 
                         color='primary' 
                         size='small' 
-                        onClick={(e)=>deleteQty(e,id)}>
+                        onClick={(e)=>deleteQty(e,id,Quantity,case_cost,promo,stock,index)}>
                         <FontAwesomeIcon icon={faTrash} className="text-black text-sm p-1" />
                     </Button>
                     </div>
@@ -87,7 +88,7 @@ export default function Responsiveproduceorder({id,produce_name,case_cost,case_s
                                 variant='outlined' 
                                 color='primary' 
                                 size='small' 
-                                onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock)}>
+                                onClick={e=>increaseProduceItem(e,Quantity,id,case_cost,promo,stock,index)}>
                                 +
                             </Button>
                         </div>
