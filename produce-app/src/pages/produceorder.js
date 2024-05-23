@@ -1,5 +1,6 @@
 import React from 'react'
 import Images from 'next/image'
+import { useRouter } from 'next/router';
 import Responsiveproduceorder from '@/components/Responsiveproduceorder'
 import { Stack, Autocomplete, TextField, Button } from "@mui/material"
 import trashDelete from "../components/images/deleteTrash.png"
@@ -28,6 +29,9 @@ import { toggle } from '@nextui-org/react'
 
 // import {  Autocomplete,  AutocompleteSection,  AutocompleteItem} from "@nextui-org/autocomplete";
 export default function produceorder() {
+
+  const router = useRouter();
+  
     const [produceListItems, setProduceListItems] = useState([{id:0, name:"apple gala", product_code:"110", inventory:"40", case_cost:27.41, case_size:"40 lbs", promo_price:17.49, stock:true, produce_Image: gala_apple, Qty:1},
                             {id:1, name:"apple fuji", product_code:"108", inventory:"20", case_cost:27.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: fuji_apple, Qty:1},
                             {id:2, name:"apple honeycrisp", product_code:"111", inventory:"80", case_cost:27.41, case_size:"40 lbs", promo_price:12.49, stock:true, produce_Image: honey_crisp, Qty:1},
@@ -265,6 +269,16 @@ export default function produceorder() {
         console.log("currentTotal is ", currentBalance)
   }
 
+  const handleConfirmOrder=()=>{
+    console.log(userCurrentOrder)
+        // Convert the order to a query parameter string
+        const query = encodeURIComponent(JSON.stringify(userCurrentOrder));
+
+        console.log(query)
+
+        router.push(`/produce-list?order=${query}`);
+  }
+
   return (
 
     <div>
@@ -405,7 +419,7 @@ export default function produceorder() {
             <div className='grid grid-rows-1'>
               <div className='flex justify-center'>
                 <div></div>
-                <Button className='text-black sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined'>Confirm Order</Button>
+                <Button className='text-black sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined' onClick={handleConfirmOrder}>Confirm Order</Button>
               </div>
             </div>
             <div className='inline-block ml-10'>
