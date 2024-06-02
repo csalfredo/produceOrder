@@ -26,6 +26,7 @@ import watermelon from "../components/images/watermelon.png"
 
 import { useState, useEffect } from 'react'
 import { toggle, user } from '@nextui-org/react'
+import queryString from 'query-string';
 
 // import {  Autocomplete,  AutocompleteSection,  AutocompleteItem} from "@nextui-org/autocomplete";
 export default function produceorder() {
@@ -278,11 +279,19 @@ export default function produceorder() {
 
 
         // Convert the order to a query parameter string
-        const query = encodeURIComponent(JSON.stringify(userCurrentOrder));
+        // const query = encodeURIComponent(JSON.stringify(userCurrentOrder));
+        const query={
+          order: JSON.stringify(userCurrentOrder),
+          prdcItmLst: JSON.stringify(produceListItems)
+        }
 
-        console.log(query)
+        //TODO:CONVERT THE QUERY OBJECT TO A QUERY STRING
+        const queryStringified=queryString.stringify(query)
 
-        router.push(`/produce-list?order=${query}`);
+        console.log(queryStringified)
+
+
+        router.push(`/produce-list?${queryStringified}`);
   }
 
   return (
@@ -303,7 +312,7 @@ export default function produceorder() {
               value={value}
               onChange={(e, newValue)=>setProduceValue(newValue)}
             />
-          </Stack>.
+          </Stack>
         </div>
           <div className='flex justify-center mt-2'>
             <Button onClick={(e)=>getCurrentProduceValue(e)} variant='outlined'>Enter</Button>
