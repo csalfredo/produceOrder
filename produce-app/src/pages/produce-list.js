@@ -251,6 +251,13 @@ const ProduceList = () => {
   
   }
 
+  const deleteRecord=(index)=>{
+    let tempID=produceItems[index].id
+
+    setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
+
+  }
+
   return (
     <div className="grid grid-rows-1 border border-black bg-blue-50">
         <div className='grid grid-rows-1'>
@@ -376,7 +383,7 @@ const ProduceList = () => {
                                 size='small' 
                                 >CANCEL</Button>
                               :
-                              <Button className='border border-black'
+                              <Button className='border border-black' onClick={()=>deleteRecord(index)}
                               sx={{
                                   fontSize: '0.75rem', // smaller font size
                                   padding: '2px 8px', // custom padding
