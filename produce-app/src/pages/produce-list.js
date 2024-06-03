@@ -36,7 +36,6 @@ const ProduceList = () => {
         const decodedOrder=decodeURIComponent(orderParam)
         const parsedOrder=JSON.parse(decodedOrder)
         setProduceItems(parsedOrder)
-        console.log(parsedOrder)
       } catch (error) {
         console.error("Failed to decode or parse order:", error)
       }
@@ -48,7 +47,6 @@ const ProduceList = () => {
         const decodedOrder=decodeURIComponent(prdcItmLst)
         const parsedProduceL=JSON.parse(decodedOrder)
         setListItems(parsedProduceL)
-        console.log(parsedProduceL)
       } catch (error) {
                 console.error("Failed to decode or parse produceList:", error)
       }
@@ -58,19 +56,17 @@ const ProduceList = () => {
   }, [])
 
 
-  console.log("tesint inside produce-list")
-
 
   const getQuantity=()=>{
     let index=0;
     let currentQuantity=0;
+
 
     while (produceItems.length > index) {
       quantityItems[index]=produceItems[index].Qty;
       index++;
     }//end of while loop
 
-    console.log(quantityItems)
   }
 
   const getTotalQuantity=()=>{
@@ -82,7 +78,7 @@ const ProduceList = () => {
     getQuantity();
 
     while (quantityItems.length > index) {
-      tempValue1=quantityItems[index]
+      tempValue1=parseInt(quantityItems[index])
       tempTotalQnty=tempValue1+tempValue2
       tempValue2=tempTotalQnty
       index++
@@ -90,7 +86,9 @@ const ProduceList = () => {
 
     totalQ=tempTotalQnty
 
-    console.log(tempTotalQnty)
+    console.log(quantityItems)
+    console.log(totalQ)
+
     return totalQ
 
   }
@@ -111,25 +109,18 @@ const ProduceList = () => {
       tempPrice=total_Balance[index];
       tempQnty=quantityItems[index];
 
-      console.log("tempPrice is ", tempPrice, ",and the Quantity is ", tempQnty)
-
       tempTotal= tempPrice*tempQnty
       grand_Total[index]=tempTotal;
       index++
     }//end of while loop
-    console.log(grand_Total)
 
     while (grand_Total.length > x) {
       temp=grand_Total[x]
-      console.log("BEFORE ADDITION: temp is ", temp, "temp2 is ",temp2, "total is ", total)
       total=temp+temp2
-      console.log("currentTotal is ", total)
       temp2=total
-      console.log("AFTER ADDITION: temp is ", temp, "temp2 is ",temp2, "currentTotal is ", total)
       x++
     }//end of while loop
 
-    console.log("total is ", total)
   }
 
   const getTotal=()=>{
@@ -138,8 +129,6 @@ const ProduceList = () => {
     let qnty=0
 
     while(produceItems.length > index){
-
-      console.log(produceItems[index])
 
       if(produceItems[index].promo_price===0){
         total_Balance[index]=produceItems[index].case_cost
@@ -155,19 +144,11 @@ const ProduceList = () => {
     getQuantity()
     //TODO:CALCULATE TOTAL
     calculateTotal();
-
-    console.log("Total quanity is ", qnty)
-    console.log(total_Balance)
     return total
   }
 
   const toggleEdit=(index)=>{
     let tempValue
-
-    console.log("index is ", index, ", and editIndex is ", editIndex)
-    console.log(produceItems[index].name)
-
-    console.log("value is ", value)
     setValue('')
     setValueQty('')
     // setQtyIndex(index !== qtyIndex ? index : null)    
@@ -183,23 +164,18 @@ const ProduceList = () => {
 
   const setValueUpdateQty=(e,row)=>{
  
-    console.log("Inside setValueUpdateQty",e.target.value,",and row is ", row)
-
-    console.log("BEFORE UPDATING QUANTITY THE VALUE IS ", produceItems[row])
 
     setProduceValue(produceItems[row],row)
     setValueQty(e.target.value)
   }
 
   const setProduceValue=(newValue, id)=>{
-    console.log("newValue is ", newValue)
     setValue(newValue);
   }
 
   const getValue=(indexRow)=>{
     let tempValue
 
-    console.log(indexRow)
 
     if(produceItems[indexRow] !==null){
           return produceItems[indexRow]
@@ -215,7 +191,6 @@ const ProduceList = () => {
   }
 
   const getQtyValue=(index)=>{
-    console.log("index is ", index)
     if (produceItems[index] !==null) {
       return produceItems[index].Qty
     }
@@ -223,15 +198,9 @@ const ProduceList = () => {
 
   const updateData=(index)=>{
 
-    console.log(valueQty)
-
-    console.log(produceItems[index])
-
     
     //TODO:GET THE PRODUCE NAME FROM THE NEW VALUE
     let updateProduceName = value.name
-
-    console.log(produceItems[index])
 
     //TODO:USING THE INDEX VALUE REPLACE THE CURRENT PRODUCE NAME WITH THE VALUE OF THE NEW NAME
     produceItems[index].name=updateProduceName
@@ -245,8 +214,6 @@ const ProduceList = () => {
     produceItems[index].Qty=valueQty
 
 
-    console.log(produceItems[index])
-    console.log(value)
     toggleEdit(index)
   
   }
@@ -274,11 +241,6 @@ const ProduceList = () => {
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
                         {editIndex===index ?
-                          // <TextField 
-                          //   label="Item"
-                          //   value={value}
-                          //   onChange={setValueUpdateProduce}
-                          // />
                           <Stack spacing={2} width='250px'>
                               <Autocomplete 
                                 options={listItems} 
