@@ -169,7 +169,8 @@ const ProduceList = () => {
 
     console.log("value is ", value)
     setValue('')
-    setQtyIndex(index !== qtyIndex ? index : null)    
+    setValueQty('')
+    // setQtyIndex(index !== qtyIndex ? index : null)    
     setEditIndex(index !== editIndex ? index : null)
     setEditButtonIndex(index !== editButtonIndex ? index : null)
     setDeleteButtonIndex(index !== deleteButtonIndex ? index : null)
@@ -180,16 +181,25 @@ const ProduceList = () => {
     console.log("Inside value of setValueUpdateProduce is")
   }
 
-  const setValueUpdateQty=()=>{
-    console.log("Inside setValueUpdateQty")
+  const setValueUpdateQty=(e,row)=>{
+ 
+    console.log("Inside setValueUpdateQty",e.target.value,",and row is ", row)
+
+    console.log("BEFORE UPDATING QUANTITY THE VALUE IS ", produceItems[row])
+
+    setProduceValue(produceItems[row],row)
+    setValueQty(e.target.value)
   }
 
   const setProduceValue=(newValue, id)=>{
+    console.log("newValue is ", newValue)
     setValue(newValue);
   }
 
   const getValue=(indexRow)=>{
     let tempValue
+
+    console.log(indexRow)
 
     if(produceItems[indexRow] !==null){
           return produceItems[indexRow]
@@ -205,12 +215,19 @@ const ProduceList = () => {
   }
 
   const getQtyValue=(index)=>{
+    console.log("index is ", index)
     if (produceItems[index] !==null) {
       return produceItems[index].Qty
     }
   }
 
   const updateData=(index)=>{
+
+    console.log(valueQty)
+
+    console.log(produceItems[index])
+
+    
     //TODO:GET THE PRODUCE NAME FROM THE NEW VALUE
     let updateProduceName = value.name
 
@@ -225,6 +242,7 @@ const ProduceList = () => {
     produceItems[index].case_size=value.case_size
     produceItems[index].product_code=value.product_code
     produceItems[index].stock=value.stock
+    produceItems[index].Qty=valueQty
 
 
     console.log(produceItems[index])
@@ -283,7 +301,7 @@ const ProduceList = () => {
                   </div>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
-                        {qtyIndex===index ?
+                        {editIndex===index ?
                         <TextField
                           sx={{
                             width: '55px', // minimum width
@@ -295,7 +313,7 @@ const ProduceList = () => {
                         }
                           label="Qty"
                           value={valueQty===null ? getQtyValue(index) : valueQty}    
-                          onChange={setValueUpdateQty}
+                          onChange={(e)=>setValueUpdateQty(e,editIndex)}
                         />
                         :
                           <p className='uppercase font-bold text-sm font-instrument'>Quantity: {item.Qty}</p>
