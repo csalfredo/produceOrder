@@ -293,7 +293,7 @@ const ProduceList = () => {
                           />
                         </Stack>
                             :
-                            <p className='uppercase font-bold text-sm font-instrument'>{item.name}</p>
+                            <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
                         } 
                       </div>
                   </div>
@@ -314,13 +314,13 @@ const ProduceList = () => {
                           onChange={(e)=>setValueUpdateQty(e,editIndex)}
                         />
                         :
-                          <p className='uppercase font-bold text-sm font-instrument'>Quantity: {item.Qty}</p>
+                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Quantity: {item.Qty}</p>
                         }
                       </div>
                   </div>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
-                          <p className='uppercase font-bold text-sm font-instrument'>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
+                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
                       <div>
                         {item.stock===false && <p className='text-sm/[10px] text-orange-500 font-bold'>OUT OF STOCK</p>}
