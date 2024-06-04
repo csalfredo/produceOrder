@@ -17,6 +17,7 @@ const ProduceList = () => {
   const [valueQty, setValueQty]=useState(null)
   const [editButtonIndex, setEditButtonIndex]=useState(null)
   const [deleteButtonIndex, setDeleteButtonIndex]=useState(null)
+  const [isDisabled, setIsDisabled]=useState(false)
 
 
   let quantityItems=[]
@@ -83,7 +84,13 @@ const ProduceList = () => {
 
 
     while (produceItems.length > index) {
-      quantityItems[index]=produceItems[index].Qty;
+      if (produceItems[index].stock !==false) {
+          quantityItems[index]=produceItems[index].Qty;
+      }
+      else{
+        quantityItems[index]=0
+      }
+
       index++;
     }//end of while loop
 
@@ -98,9 +105,10 @@ const ProduceList = () => {
     getQuantity();
 
     while (quantityItems.length > index) {
-      tempValue1=parseInt(quantityItems[index])
-      tempTotalQnty=tempValue1+tempValue2
-      tempValue2=tempTotalQnty
+        tempValue1=parseInt(quantityItems[index])
+        tempTotalQnty=tempValue1+tempValue2
+        tempValue2=tempTotalQnty
+
       index++
     }//end of while loop
 
@@ -258,7 +266,7 @@ const ProduceList = () => {
         {produceItems.map((item, index) => (
           <div key={item.id} className="mb-2">
               <div className="flex justify-center items-center">
-                <div className='border border-black w-8/12 grid grid-cols-5 rounded-md p-1 bg-white'>
+                <div className={`border border-black w-8/12 grid grid-cols-5 rounded-md p-1 ${item.stock===false ? 'bg-gray-300' : 'bg-white'}`}>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
                         {editIndex===index ?
@@ -314,6 +322,10 @@ const ProduceList = () => {
                       <div className='flex justify-center'>
                           <p className='uppercase font-bold text-sm font-instrument'>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
+                      <div>
+                        {item.stock===false && <p className='text-sm/[10px] text-orange-500 font-bold'>OUT OF STOCK</p>}
+                      </div>
+
                   </div>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
@@ -344,6 +356,7 @@ const ProduceList = () => {
                               variant='outlined' 
                               color='primary' 
                               size='small' 
+                              disabled={item.stock===false && true}
                             >Edit</Button>
                         }
                       </div>
@@ -378,6 +391,7 @@ const ProduceList = () => {
                                   variant='outlined' 
                                   color='primary' 
                                   size='small' 
+                                  disabled={item.stock===false && true}
                                   >Delete</Button>
                         }
 
