@@ -52,10 +52,30 @@ const ProduceList = () => {
       }
     }
 
+
   
   }, [])
 
 
+  const removeOutStocks=()=>{
+    let index=0
+    let tempValue=''
+    let currentID=0
+
+    console.log(listItems)
+
+    while (listItems.length > index) {
+      tempValue=listItems[index].stock
+      if (tempValue===false) {
+        console.log("For this produceItem ", listItems[index].name, " with the id of ", listItems[index].id, ", the stock is out")
+        currentID=listItems[index].id
+        setListItems(prevItems=>prevItems.filter(item=>item.id !== currentID))
+      }
+      index++
+    }//end of while loop
+
+
+  }
 
   const getQuantity=()=>{
     let index=0;
@@ -86,8 +106,8 @@ const ProduceList = () => {
 
     totalQ=tempTotalQnty
 
-    console.log(quantityItems)
-    console.log(totalQ)
+    // console.log(quantityItems)
+    // console.log(totalQ)
 
     return totalQ
 
@@ -234,6 +254,7 @@ const ProduceList = () => {
             </div>
         </div>
       <div>
+      {listItems.length > 0 && removeOutStocks()}
         {produceItems.map((item, index) => (
           <div key={item.id} className="mb-2">
               <div className="flex justify-center items-center">
