@@ -409,7 +409,7 @@ const ProduceList = () => {
         <p className='font-bold font-instrument'>TOTAL: ${parseFloat(getTotal()).toFixed(2)}</p>
       </div>
       <div className='flex justify-center'>
-        <Button className='border border-black mb-2'
+        <Button className='border border-black mb-2 hover:bg-teal-500'
           sx={{
             fontSize: '0.75rem', // smaller font size
             padding: '2px 8px', // custom padding
