@@ -258,7 +258,7 @@ const ProduceList = () => {
         <div className='grid grid-rows-1'>
             <div className='flex justify-center'>
               {/* {console.log(produceItems[length])} */}
-                <h1 className="text-2xl font-bold mb-4">Confirm Your Order</h1>
+                <h1 className="text-2xl font-bold mb-4 font-instrument">Confirm Your Order</h1>
             </div>
         </div>
       <div>

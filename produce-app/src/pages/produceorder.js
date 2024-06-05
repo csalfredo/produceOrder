@@ -357,8 +357,8 @@ export default function produceorder() {
             onClick={(e)=>getCurrentProduceValue(e)}>Enter</Button>
           </div>
         <div className='flex justify-center'>
-          <div className='grid grid-rows-1 border border-gray-400 mt-8 w-10/12 rounded'>
-            <div className='grid grid-rows-1 mt-2  w-11/12 sm:mt-4 ml-4 mb-10 md:mb-12 lg:mb-4 rounded lg:ml-10'>
+          <div className='grid grid-rows-1 border border-gray-400 mt-8 w-10/12 rounded bg-blue-50'>
+            <div className='grid grid-rows-1 mt-2  w-11/12 sm:mt-4 ml-4 mb-10 md:mb-12 lg:mb-4 rounded lg:ml-10 bg-white'>
               <div className='p-4'>
                   {userCurrentOrder.map((item,index)=>
                       isSmallScreen===false ? (
