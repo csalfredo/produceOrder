@@ -2,7 +2,7 @@ import React from 'react'
 import Images from 'next/image'
 import { useRouter } from 'next/router';
 import Responsiveproduceorder from '@/components/Responsiveproduceorder'
-import { Stack, Autocomplete, TextField, Button } from "@mui/material"
+import { Stack, Autocomplete, TextField, Button,Snackbar } from "@mui/material"
 import trashDelete from "../components/images/deleteTrash.png"
 import gala_apple from "../components/images/gala_apple.png"
 import fuji_apple from "../components/images/fuji_apples.png"
@@ -60,6 +60,7 @@ export default function produceorder() {
     const [currentBalance, setCurrentBalance]=useState([])
     const [totalBalance,setTotalBalance]=useState(parseFloat(0.00).toFixed(2))
     const [enterButton, setEnterButton]=useState(false)
+    const [open, setOpen]=useState(false)
 
     useEffect(()=>{
       const handleResize=()=>{
@@ -83,12 +84,25 @@ export default function produceorder() {
       setValue(newValue);
     }
 
+    const toggleSnackBar=()=>{
+      setOpen(!open)
+    }
+
     const getCurrentProduceValue=()=>{
       console.log(value);
 
-      //TODO:CHANGE ENTER TO TRUE
-      toggleEnterButton()
-      setUserCurrentOrder([...userCurrentOrder,value]);
+      if (value !==null) {
+        //TODO:CHANGE ENTER TO TRUE
+        toggleEnterButton()
+        setUserCurrentOrder([...userCurrentOrder,value]);
+      }
+      else{
+        return(
+
+          toggleSnackBar()
+        )
+      }
+
 
       // setUserCurrentOrder(currentArray=>[...currentArray,value]);
       // setValue(null);
@@ -294,6 +308,21 @@ export default function produceorder() {
         router.push(`/produce-list?${queryStringified}`);
   }
 
+  const toggleOpen=()=>{
+    setOpen(!open)
+  }
+
+  const handleClose=(e,reason)=>{
+    console.log(e)
+    console.log(reason)
+
+    if (reason==='clickaway') {
+      return
+    }
+
+    toggleOpen()
+  }
+
   return (
     <div>
       {console.log("currentBalance is ", currentBalance)}
@@ -315,7 +344,17 @@ export default function produceorder() {
           </Stack>
         </div>
           <div className='flex justify-center mt-2'>
-            <Button onClick={(e)=>getCurrentProduceValue(e)} variant='outlined'>Enter</Button>
+            <Button className='border border-black hover:bg-teal-500' 
+              sx={{
+                    fontSize: '0.75rem', // smaller font size
+                    padding: '2px 8px', // custom padding
+                    minWidth: '42px', // minimum width
+                    height: '30px' ,// specific height
+                    background: '#007BFF',
+                    color: 'white'
+                }}
+
+            onClick={(e)=>getCurrentProduceValue(e)}>Enter</Button>
           </div>
         <div className='flex justify-center'>
           <div className='grid grid-rows-1 border border-gray-400 mt-8 w-10/12 rounded'>
@@ -433,7 +472,16 @@ export default function produceorder() {
             <div className='grid grid-rows-1'>
               <div className='flex justify-center'>
                 <div></div>
-                <Button className='text-black sm:flex justify-center w-4/12 lg:w-2/12' variant='outlined' onClick={handleConfirmOrder}>Confirm Order</Button>
+                <Button className='sm:flex justify-center w-4/12 lg:w-2/12 hover:bg-teal-500' 
+                  sx={{
+                    fontSize: '0.75rem', // smaller font size
+                    padding: '2px 8px', // custom padding
+                    minWidth: '42px', // minimum width
+                    height: '30px' ,// specific height
+                    background: '#007BFF',
+                    color: 'white'
+                }}                
+                onClick={handleConfirmOrder}>Confirm Order</Button>
               </div>
             </div>
             <div className='inline-block ml-10'>
@@ -444,6 +492,18 @@ export default function produceorder() {
           </div>
         </div>
 
+            {open && 
+              <Snackbar 
+                message='Need to choose an item from the list before clicking on the enter button'
+                autoHideDuration={5000}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{vertical: 'top',
+                               horizontal: 'center'      
+                }}      
+              />
+            
+            }
     </div>  
 
 
