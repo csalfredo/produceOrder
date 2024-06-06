@@ -314,7 +314,11 @@ const ProduceList = () => {
                           onChange={(e)=>setValueUpdateQty(e,editIndex)}
                         />
                         :
-                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Quantity: {item.Qty}</p>
+                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Quantity: <span className={item.stock===false ? 'text-orange-500' : ''}
+                            style={item.stock===false ? {fontSize: '11px'} : {}}
+                          >
+                            {item.stock===false? "OUT OF STOCK" : item.Qty}</span>
+                          </p>
                         }
                       </div>
                   </div>
@@ -322,10 +326,6 @@ const ProduceList = () => {
                       <div className='flex justify-center'>
                           <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
-                      <div>
-                        {item.stock===false && <p className='text-sm/[10px] text-orange-500 font-bold'>OUT OF STOCK</p>}
-                      </div>
-
                   </div>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
@@ -418,7 +418,7 @@ const ProduceList = () => {
             background: '#007BFF',
             color: 'white'
         }}
-        >Send Order</Button>
+        >SUBMIT</Button>
       </div>
     </div>
   );
