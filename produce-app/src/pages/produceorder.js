@@ -337,7 +337,7 @@ export default function produceorder() {
               options={produceListItems} 
               getOptionLabel={(option)=>option.name}
               renderInput={(params)=><TextField{...params} 
-              label="produceItems" />}
+              label="PRODUCT" />}
               value={value}
               onChange={(e, newValue)=>setProduceValue(newValue)}
             />
@@ -365,9 +365,9 @@ export default function produceorder() {
                       <div key={item.id}>
                         {enterButton && getCurrentBalance(item.Qty,item.case_cost,item.promo_price,item.stock,index, item.id)}
                         <div className='border-b-1 border border-black rounded-lg'>
-                            <div className='border border-black w-7 flex justify-center mt-2 rounded-full'>
+                            {/* <div className='border border-black w-7 flex justify-center mt-2 rounded-full'>
                               <p>{index+1}</p> 
-                            </div>
+                            </div> */}
                             <div className='grid grid-rows-1 lg:flex justify-start'>
                               <div className='lg:w-2/12 flex justify-center sm:w-6/12'>
                                 <Images alt={item.name} src={item.produce_Image} style={{width: "100%", height: "85%" }}/>
@@ -481,7 +481,7 @@ export default function produceorder() {
                     background: '#007BFF',
                     color: 'white'
                 }}                
-                onClick={handleConfirmOrder}>Confirm Order</Button>
+                onClick={handleConfirmOrder}>CHECKOUT</Button>
               </div>
             </div>
             <div className='inline-block ml-10'>
