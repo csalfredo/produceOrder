@@ -2,9 +2,10 @@
 import React, {useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSwitch } from '@nextui-org/react';
-import { Stack, Autocomplete, TextField, Button } from "@mui/material"
+import { Stack, Autocomplete, TextField, Button, MenuItem, Select } from "@mui/material"
 import queryString from 'query-string';
 import { Questrial } from 'next/font/google';
+import QuantitySelector from './QuantitySelector';
 
 const ProduceList = () => {
   const router = useRouter();
@@ -18,6 +19,9 @@ const ProduceList = () => {
   const [editButtonIndex, setEditButtonIndex]=useState(null)
   const [deleteButtonIndex, setDeleteButtonIndex]=useState(null)
   const [isDisabled, setIsDisabled]=useState(false)
+  const [quantity, setQuantity]=useState('')
+  const [isCustomQuantity,setIsCustomQuantity]=useState(false)
+  const [selectedQuantity, setSelectedQuantity] = useState('');
 
 
   let quantityItems=[]
@@ -57,6 +61,10 @@ const ProduceList = () => {
   
   }, [])
 
+  const handleQuantityChange = (quantity) => {
+    setSelectedQuantity(quantity);
+    console.log('Selected Quantity:', quantity);
+  }
 
   const removeOutStocks=()=>{
     let index=0
@@ -176,6 +184,7 @@ const ProduceList = () => {
   }
 
   const toggleEdit=(index)=>{
+    console.log("editButtonIndex is ",editButtonIndex, "index is ", index)
     let tempValue
     setValue('')
     setValueQty('')
@@ -253,6 +262,35 @@ const ProduceList = () => {
 
   }
 
+  const handleQuantity=(e)=>{
+    console.log(e.target.value)
+
+    const value=e.target.value
+    if (value==='10+') {
+      setIsCustomQuantity(true)
+      setQuantity('')
+      onQuantityChange('')
+
+    } else {
+      setIsCustomQuantity(false)
+      setQuantity(value)
+      onQuantityChange(value)
+    }
+  }
+
+  const handleChangeCustomQuantityChange=(e)=>{
+    const value= e.target.value
+    setQuantity(value)
+    onQuantityChange(value)
+  }
+
+  const handleDelete = (index) => {
+    console.log("index is ", index)
+    let tempID=produceItems[index].id
+
+    setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
+  };
+
   return (
     <div className="grid grid-rows-1 border border-black bg-blue-50">
         <div className='grid grid-rows-1'>
@@ -268,58 +306,27 @@ const ProduceList = () => {
               <div className="flex justify-center items-center">
                 <div className={`border border-black w-8/12 grid grid-cols-5 rounded-md p-1 ${item.stock===false ? 'bg-gray-300' : 'bg-white'}`}>
                   <div className='grid grid-cols-1'>
-                      <div className='flex justify-center'>
-                        {editIndex===index ?
-                          <Stack spacing={2} width='250px'>
-                              <Autocomplete 
-                                options={listItems} 
-                                getOptionLabel={(option)=>{
-                                  if (option && option.name) {
-                                    return option.name
-                                  }
-                                  console.error("Option is missing a name property:", option)
-                                  return ''
-                                }}
-                                isOptionEqualToValue={(option,value)=>option.id===value.id }
-                                renderInput={(params)=>(
-                                <TextField
-                                {...params} 
-                                label="produceItems" 
-                              />
-                              )}
-
-                            value={value.length===0 ? getValue(index) : value}
-                            onChange={(e, newValue)=>setProduceValue(newValue, editIndex)}
-                          />
-                        </Stack>
-                            :
-                            <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
-                        } 
+                      <div className='flex justify-center'>                      
+                        <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
                       </div>
                   </div>
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
-                        {editIndex===index ?
-                        <TextField
-                          sx={{
-                            width: '55px', // minimum width
-                            height: '30px', // specific height
-                            color:'black',
-                            '& .MuiInputBase-input':{
-                              fontSize: '12px'
-                          }}
-                        }
-                          label="Qty"
-                          value={valueQty===null ? getQtyValue(index) : valueQty}    
-                          onChange={(e)=>setValueUpdateQty(e,editIndex)}
-                        />
-                        :
-                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Quantity: <span className={item.stock===false ? 'text-orange-500' : ''}
-                            style={item.stock===false ? {fontSize: '11px'} : {}}
-                          >
-                            {item.stock===false? "OUT OF STOCK" : item.Qty}</span>
-                          </p>
-                        }
+                            {console.log("index is ", index, ",and the produce item is ", item.name)}
+                       
+                              <QuantitySelector 
+                                onQuantityChange={handleQuantityChange}
+                                removeItem={handleDelete}
+                                index={index}
+                                id={item.id}
+                              />                        
+                            
+
+                            {
+                              selectedQuantity !== '' && (
+                              <p className="mt-2">Selected Quantity: {selectedQuantity}</p>
+                            )}
+                        
                       </div>
                   </div>
                   <div className='grid grid-cols-1'>
@@ -327,40 +334,7 @@ const ProduceList = () => {
                           <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
                   </div>
-                  <div className='grid grid-cols-1'>
-                      <div className='flex justify-center'>
-                        {editButtonIndex===index ?
-                          <Button className='border border-black bg-teal-500 hover:bg-teal-600' onClick={()=>updateData(index)}
-                          sx={{
-                              fontSize: '0.75rem', // smaller font size
-                              padding: '4px 10px', // custom padding
-                              minWidth: '42px', // minimum width
-                              height: '30px', // specific height
-                              background: '#28a745',
-                              color:'black'
-                            }}
-                            variant='outlined' 
-                            color='primary' 
-                            size='small' 
-                            >SAVE</Button> 
-                              :
-                            <Button className='border border-black' onClick={()=>toggleEdit(index)}
-                            sx={{
-                                fontSize: '0.75rem', // smaller font size
-                                padding: '4px 10px', // custom padding
-                                minWidth: '42px', // minimum width
-                                height: '30px', // specific height
-                                background: '#28a745',
-                                color:'black'
-                              }}
-                              variant='outlined' 
-                              color='primary' 
-                              size='small' 
-                              disabled={item.stock===false && true}
-                            >Edit</Button>
-                        }
-                      </div>
-                  </div>
+
                   <div className='grid grid-cols-1'>
                       <div className='flex justify-center'>
                         {deleteButtonIndex===index ?
