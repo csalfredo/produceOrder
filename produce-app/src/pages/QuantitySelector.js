@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { MenuItem, Select, TextField } from '@mui/material';
+import { MenuItem, Select, TextField, Menu} from '@mui/material';
+import {styled } from "@mui/material/styles"
 
-const QuantitySelector = ({ onQuantityChange, removeItem,index,id }) => {
+const CustomMenu = styled(Menu)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    maxHeight: '75%', // Adjust the value to set the desired height
+    overflowY:'auto',
+  },
+}));
+
+
+const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }) => {
   const [quantity, setQuantity] = useState('');
   const [isCustomQuantity, setIsCustomQuantity] = useState(false);
 
@@ -33,14 +42,30 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id }) => {
     onQuantityChange(value); // Notify parent of the custom quantity
   };
 
+  const getValue=()=>{
+    console.log("index is ", index)
+
+    return produceItems[index].Qty
+  }
+
   return (
     <div>
+      {console.log("quantity is ", quantity.length)}
       {!isCustomQuantity ? (
         <Select
-          value={quantity}
+          value={quantity.length===0 ? getValue() : quantity}
           onChange={handleQuantityChange}
           displayEmpty
-          className="w-32 p-2 border border-gray-300 rounded"
+          sx={{background: '#E8E8E8',width: "45%", height: "45px", lineHeight: 'normal'}}
+          className="border border-gray-300 rounded"
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: '75%', // Set the desired max height
+                overflowY: 'auto',
+              },
+            },
+          }}
         >
           <MenuItem value=""><em>Qty</em></MenuItem>
           {[...Array(10).keys()].map((num) => (
@@ -54,7 +79,7 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id }) => {
           value={quantity}
           onChange={handleCustomQuantityChange}
           placeholder="Enter quantity"
-          className="w-32 p-2 border border-gray-300 rounded"
+          className="border border-gray-300 rounded"
         />
       )}
     </div>

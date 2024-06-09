@@ -292,7 +292,7 @@ const ProduceList = () => {
   };
 
   return (
-    <div className="grid grid-rows-1 border border-black bg-blue-50">
+    <div className="border border-black bg-blue-50">
         <div className='grid grid-rows-1'>
             <div className='flex justify-center'>
               {/* {console.log(produceItems[length])} */}
@@ -304,38 +304,35 @@ const ProduceList = () => {
         {produceItems.map((item, index) => (
           <div key={item.id} className="mb-2">
               <div className="flex justify-center items-center">
-                <div className={`border border-black w-8/12 grid grid-cols-5 rounded-md p-1 ${item.stock===false ? 'bg-gray-300' : 'bg-white'}`}>
-                  <div className='grid grid-cols-1'>
-                      <div className='flex justify-center'>                      
-                        <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
-                      </div>
-                  </div>
-                  <div className='grid grid-cols-1'>
-                      <div className='flex justify-center'>
-                            {console.log("index is ", index, ",and the produce item is ", item.name)}
-                       
+                <div className={`border border-black w-5/12 rounded-md ${item.stock===false ? 'bg-gray-300' : 'bg-white'}`}>
+
+                {/* TODO: */}
+                  <div className='grid grid-rows-1 border border-green-500'>
+                    <div className='grid grid-cols-4'>
+                    <div className='border border-red-700'>
+                        <div className='flex justify-center'>                      
+                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
+                        </div>
+                    </div>
+                  <div>
                               <QuantitySelector 
                                 onQuantityChange={handleQuantityChange}
                                 removeItem={handleDelete}
                                 index={index}
                                 id={item.id}
+                                produceItems={produceItems}
                               />                        
-                            
-
                             {
                               selectedQuantity !== '' && (
                               <p className="mt-2">Selected Quantity: {selectedQuantity}</p>
                             )}
-                        
-                      </div>
                   </div>
-                  <div className='grid grid-cols-1'>
+                  <div className=''>
                       <div className='flex justify-center'>
                           <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
                   </div>
-
-                  <div className='grid grid-cols-1'>
+                  <div className=''>
                       <div className='flex justify-center'>
                         {deleteButtonIndex===index ?
                             <Button className='border border-black bg-gray-500 hover:bg-gray-600'
@@ -353,6 +350,7 @@ const ProduceList = () => {
                                 size='small' 
                                 >CANCEL</Button>
                               :
+                            <div className=''>
                               <Button className='border border-black' onClick={()=>deleteRecord(index)}
                               sx={{
                                   fontSize: '0.75rem', // smaller font size
@@ -367,10 +365,15 @@ const ProduceList = () => {
                                   size='small' 
                                   disabled={item.stock===false && true}
                                   >Delete</Button>
+                            </div>
+
                         }
 
                       </div>
                   </div>
+                  </div>
+                  </div>
+                  {/* TODO: */}
                 </div>
               </div>
           </div>
