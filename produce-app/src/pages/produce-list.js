@@ -61,9 +61,12 @@ const ProduceList = () => {
   
   }, [])
 
-  const handleQuantityChange = (quantity) => {
+  const handleQuantityChange = (quantity,index) => {
     setSelectedQuantity(quantity);
-    console.log('Selected Quantity:', quantity);
+    console.log('Selected Quantity:', quantity, ",and index is ", index);
+
+    produceItems[index].Qty=quantity
+
   }
 
   const removeOutStocks=()=>{
@@ -262,27 +265,30 @@ const ProduceList = () => {
 
   }
 
-  const handleQuantity=(e)=>{
-    console.log(e.target.value)
+  // const handleQuantity=(e)=>{
+  //   console.log(e.target.value)
 
-    const value=e.target.value
-    if (value==='10+') {
-      setIsCustomQuantity(true)
-      setQuantity('')
-      onQuantityChange('')
+  //   const value=e.target.value
+  //   if (value==='10+') {
+  //     setIsCustomQuantity(true)
+  //     setQuantity('')
+  //     onQuantityChange('')
 
-    } else {
-      setIsCustomQuantity(false)
-      setQuantity(value)
-      onQuantityChange(value)
-    }
-  }
+  //   } else {
+  //     setIsCustomQuantity(false)
+  //     setQuantity(value)
+  //     onQuantityChange(value)
+  //   }
+  // }
 
-  const handleChangeCustomQuantityChange=(e)=>{
-    const value= e.target.value
-    setQuantity(value)
-    onQuantityChange(value)
-  }
+  // const handleChangeCustomQuantityChange=(e)=>{
+  //   const value= e.target.value
+
+  //   console.log(value)
+
+  //   setQuantity(value)
+  //   onQuantityChange(value)
+  // }
 
   const handleDelete = (index) => {
     console.log("index is ", index)
@@ -290,6 +296,11 @@ const ProduceList = () => {
 
     setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
   };
+
+  const submitOrder=()=>{
+    console.log(produceItems)
+    console.log(quantity)
+  }
 
   return (
     <div className="border border-black bg-blue-50">
@@ -309,10 +320,8 @@ const ProduceList = () => {
                 {/* TODO: */}
                   <div className='grid grid-rows-1 border border-green-500'>
                     <div className='grid grid-cols-4'>
-                    <div className='border border-red-700'>
-                        <div className='flex justify-center'>                      
-                          <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
-                        </div>
+                    <div className='border border-red-700 flex justify-center items-center'>  
+                      <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
                     </div>
                   <div>
                               <QuantitySelector 
@@ -322,18 +331,18 @@ const ProduceList = () => {
                                 id={item.id}
                                 produceItems={produceItems}
                               />                        
-                            {
+                            {/* {
                               selectedQuantity !== '' && (
                               <p className="mt-2">Selected Quantity: {selectedQuantity}</p>
-                            )}
+                            )} */}
                   </div>
-                  <div className=''>
-                      <div className='flex justify-center'>
+                  <div className='grid grid-rows-1'>
+                      <div className='flex justify-center items-center'>
                           <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>Price: ${item.promo_price===0 ? item.case_cost : item.promo_price}</p>
                       </div>
                   </div>
-                  <div className=''>
-                      <div className='flex justify-center'>
+                  <div className='grid grid-rows-1'>
+                      <div className='flex justify-center items-center'>
                         {deleteButtonIndex===index ?
                             <Button className='border border-black bg-gray-500 hover:bg-gray-600'
                               onClick={()=>clearProgress(index)}
@@ -386,7 +395,7 @@ const ProduceList = () => {
         <p className='font-bold font-instrument'>TOTAL: ${parseFloat(getTotal()).toFixed(2)}</p>
       </div>
       <div className='flex justify-center'>
-        <Button className='border border-black mb-2 hover:bg-teal-500'
+        <Button className='border border-black mb-2 hover:bg-teal-500' onClick={submitOrder}
           sx={{
             fontSize: '0.75rem', // smaller font size
             padding: '2px 8px', // custom padding

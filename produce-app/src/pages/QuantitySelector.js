@@ -25,21 +25,21 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }
     if (value === '10+') {
       setIsCustomQuantity(true);
       setQuantity('');
-      onQuantityChange(''); // Notify parent of empty selection
+      onQuantityChange('',index); // Notify parent of empty selection
     } else if(value===0){
         removeItem(index)
     }
     else {
       setIsCustomQuantity(false);
       setQuantity(value);
-      onQuantityChange(value); // Notify parent of the selected quantity
+      onQuantityChange(value,index); // Notify parent of the selected quantity
     }
   };
 
   const handleCustomQuantityChange = (event) => {
     const value = event.target.value;
     setQuantity(value);
-    onQuantityChange(value); // Notify parent of the custom quantity
+    onQuantityChange(value,index); // Notify parent of the custom quantity
   };
 
   const getValue=()=>{
@@ -49,7 +49,7 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }
   }
 
   return (
-    <div>
+    <div className='flex justify-center items-center'>
       {console.log("quantity is ", quantity.length)}
       {!isCustomQuantity ? (
         <Select
@@ -67,19 +67,26 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }
             },
           }}
         >
-          <MenuItem value=""><em>Qty</em></MenuItem>
-          {[...Array(10).keys()].map((num) => (
+          <MenuItem key={0} value={0}>0(DELETE)</MenuItem>
+          {/* {[...Array(10).keys()].map((num) => (
+            <MenuItem key={num} value={num}>{num}</MenuItem>
+          ))} */}
+          {Array.from({ length: 9}, (_, index)=>index+1).map((num)=>(
             <MenuItem key={num} value={num}>{num}</MenuItem>
           ))}
           <MenuItem value="10+">10+</MenuItem>
         </Select>
       ) : (
         <TextField
-          type="number"
           value={quantity}
           onChange={handleCustomQuantityChange}
-          placeholder="Enter quantity"
+          placeholder="Qty"
           className="border border-gray-300 rounded"
+          sx={{
+            width:"45%",
+            fontSize: '1.20rem',
+          
+          }}
         />
       )}
     </div>
