@@ -1,6 +1,7 @@
 import React from 'react'
 import Images from 'next/image'
 import { useRouter } from 'next/router';
+import { useProduce } from './context/ProduceContext';
 import Responsiveproduceorder from '@/components/Responsiveproduceorder'
 import { Stack, Autocomplete, TextField, Button,Snackbar } from "@mui/material"
 import trashDelete from "../components/images/deleteTrash.png"
@@ -31,34 +32,37 @@ import queryString from 'query-string';
 // import {  Autocomplete,  AutocompleteSection,  AutocompleteItem} from "@nextui-org/autocomplete";
 export default function produceorder() {
 
-  const router = useRouter();
+
   
-    const [produceListItems, setProduceListItems] = useState([{id:0, name:"apple gala", product_code:"110", inventory:"40", case_cost:27.41, case_size:"40 lbs", promo_price:17.49, stock:true, produce_Image: gala_apple, Qty:1,totalBalance:0.00},
-                            {id:1, name:"apple fuji", product_code:"108", inventory:"20", case_cost:27.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: fuji_apple, Qty:1,totalBalance:0.00},
-                            {id:2, name:"apple honeycrisp", product_code:"111", inventory:"80", case_cost:27.41, case_size:"40 lbs", promo_price:12.49, stock:true, produce_Image: honey_crisp, Qty:1,totalBalance:0.00},
-                            {id:3, name:"apple granny smith", product_code:"114", inventory:"10", case_cost:49.50, case_size:"40 lbs", promo_price:0, stock:false, produce_Image: granny_smith, Qty:1,totalBalance:0.00},
-                            {id:4, name:"oranges", product_code:"350", inventory:"22", case_cost:29.41, case_size:"38 lbs", promo_price:0, stock:true, produce_Image: oranges_navel, Qty:1,totalBalance:0.00},
-                            {id:5, name:"lemons", product_code:"266", inventory:"8", case_cost:11.19, case_size:"75 units", promo_price:0, stock:false, produce_Image: lemons, Qty:1,totalBalance:0.00},
-                            {id:6, name:"limes", product_code:"278", inventory:"65", case_cost:51.49, case_size:"230 units", promo_price:0, stock:true, produce_Image: limes, Qty:1,totalBalance:0.00},
-                            {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:22.99, case_size:"8 units", promo_price:0, stock:true, produce_Image: strawberries, Qty:1,totalBalance:0.00},
-                            {id:8, name:"bananas", product_code:"142", inventory:"445", case_cost:40.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: bananas, Qty:1,totalBalance:0.00},
-                            {id:9, name:"blueberries", product_code:"166", inventory:"110", case_cost:21.41, case_size:"10 units", promo_price:11.00, stock:true, produce_Image: blueberries, Qty:1,totalBalance:0.00},
-                            {id:10, name:"cabbage", product_code:"178", inventory:"12", case_cost:16.00, case_size:"45 lbs", promo_price:0, stock:false, produce_Image: cabbage, Qty:1,totalBalance:0.00},
-                            {id:11, name:"green grapes", product_code:"248", inventory:"55", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: green_grapes, Qty:1,totalBalance:0.00},
-                            {id:12, name:"raspberries", product_code:"167", inventory:"10", case_cost:25.99, case_size:"10 unit s", promo_price:0, stock:false, produce_Image: raspberries, Qty:1,totalBalance:0.00},
-                            {id:13, name:"red grapes", product_code:"250", inventory:"50", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: red_grapes, Qty:1,totalBalance:0.00},
-                            {id:14, name:"roma", product_code:"482", inventory:"100", case_cost:25.49, case_size:"25 lbs", promo_price:15.00, stock:true, produce_Image: roma, Qty:1,totalBalance:0.00},
-                            {id:15, name:"tomato", product_code:"478", inventory:"40", case_cost:20.49, case_size:"15 lbs", promo_price:0, stock:true, produce_Image: tomato, Qty:1,totalBalance:0.00},
-                            {id:16, name:"watermelon", product_code:"304", inventory:"40 bins", case_cost:200.15, case_size:"120 units", promo_price:0, stock:true, produce_Image: watermelon, Qty:1,totalBalance:0.00},
-                          ]);
-    const [userCurrentOrder, setUserCurrentOrder]=useState([]);
+    // const [produceListItems, setProduceListItems] = useState([{id:0, name:"apple gala", product_code:"110", inventory:"40", case_cost:27.41, case_size:"40 lbs", promo_price:17.49, stock:true, produce_Image: gala_apple, Qty:1,totalBalance:0.00},
+    //                         {id:1, name:"apple fuji", product_code:"108", inventory:"20", case_cost:27.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: fuji_apple, Qty:1,totalBalance:0.00},
+    //                         {id:2, name:"apple honeycrisp", product_code:"111", inventory:"80", case_cost:27.41, case_size:"40 lbs", promo_price:12.49, stock:true, produce_Image: honey_crisp, Qty:1,totalBalance:0.00},
+    //                         {id:3, name:"apple granny smith", product_code:"114", inventory:"10", case_cost:49.50, case_size:"40 lbs", promo_price:0, stock:false, produce_Image: granny_smith, Qty:1,totalBalance:0.00},
+    //                         {id:4, name:"oranges", product_code:"350", inventory:"22", case_cost:29.41, case_size:"38 lbs", promo_price:0, stock:true, produce_Image: oranges_navel, Qty:1,totalBalance:0.00},
+    //                         {id:5, name:"lemons", product_code:"266", inventory:"8", case_cost:11.19, case_size:"75 units", promo_price:0, stock:false, produce_Image: lemons, Qty:1,totalBalance:0.00},
+    //                         {id:6, name:"limes", product_code:"278", inventory:"65", case_cost:51.49, case_size:"230 units", promo_price:0, stock:true, produce_Image: limes, Qty:1,totalBalance:0.00},
+    //                         {id:7, name:"strawberries", product_code:"266", inventory:"100", case_cost:22.99, case_size:"8 units", promo_price:0, stock:true, produce_Image: strawberries, Qty:1,totalBalance:0.00},
+    //                         {id:8, name:"bananas", product_code:"142", inventory:"445", case_cost:40.41, case_size:"40 lbs", promo_price:0, stock:true, produce_Image: bananas, Qty:1,totalBalance:0.00},
+    //                         {id:9, name:"blueberries", product_code:"166", inventory:"110", case_cost:21.41, case_size:"10 units", promo_price:11.00, stock:true, produce_Image: blueberries, Qty:1,totalBalance:0.00},
+    //                         {id:10, name:"cabbage", product_code:"178", inventory:"12", case_cost:16.00, case_size:"45 lbs", promo_price:0, stock:false, produce_Image: cabbage, Qty:1,totalBalance:0.00},
+    //                         {id:11, name:"green grapes", product_code:"248", inventory:"55", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: green_grapes, Qty:1,totalBalance:0.00},
+    //                         {id:12, name:"raspberries", product_code:"167", inventory:"10", case_cost:25.99, case_size:"10 unit s", promo_price:0, stock:false, produce_Image: raspberries, Qty:1,totalBalance:0.00},
+    //                         {id:13, name:"red grapes", product_code:"250", inventory:"50", case_cost:53.49, case_size:"18 lbs", promo_price:0, stock:true, produce_Image: red_grapes, Qty:1,totalBalance:0.00},
+    //                         {id:14, name:"roma", product_code:"482", inventory:"100", case_cost:25.49, case_size:"25 lbs", promo_price:15.00, stock:true, produce_Image: roma, Qty:1,totalBalance:0.00},
+    //                         {id:15, name:"tomato", product_code:"478", inventory:"40", case_cost:20.49, case_size:"15 lbs", promo_price:0, stock:true, produce_Image: tomato, Qty:1,totalBalance:0.00},
+    //                         {id:16, name:"watermelon", product_code:"304", inventory:"40 bins", case_cost:200.15, case_size:"120 units", promo_price:0, stock:true, produce_Image: watermelon, Qty:1,totalBalance:0.00},
+    //                       ]);
+    // const [userCurrentOrder, setUserCurrentOrder]=useState([])
+    const { produceListItems, userCurrentOrder, updateUserOrder, updateTotalBalance,totalBalance,updateQtyTotal,qtyTotal,getQty} = useProduce();
+    const router = useRouter();
+
     const [value, setValue]=useState(null);
     const [valueQty, setValueQty]=useState(1);
     const [isSmallScreen, setIsSmallScreen]=useState(false)
     const [isMediumScreen, setIsMediumScreen]=useState(false)
     const [isLargeScreen, setIsLargeScreen]=useState(false)
     const [currentBalance, setCurrentBalance]=useState([])
-    const [totalBalance,setTotalBalance]=useState(parseFloat(0.00).toFixed(2))
+    // const [totalBalance,setTotalBalance]=useState(parseFloat(0.00).toFixed(2))
     const [enterButton, setEnterButton]=useState(false)
     const [open, setOpen]=useState(false)
 
@@ -94,7 +98,11 @@ export default function produceorder() {
       if (value !==null) {
         //TODO:CHANGE ENTER TO TRUE
         toggleEnterButton()
-        setUserCurrentOrder([...userCurrentOrder,value]);
+        // setUserCurrentOrder([...userCurrentOrder,value]);
+        if (value && !userCurrentOrder.find(item => item.id === value.id)) {
+          const selectedItem = produceListItems.find(item => item.id === value.id);
+          updateUserOrder([...userCurrentOrder, { ...selectedItem, quantity: 1 }]);
+        }
       }
       else{
         return(
@@ -112,11 +120,28 @@ export default function produceorder() {
       let index=0;
       let locationFound;
 
-      while (index < produceListItems.length) {
-        if(produceListItems[index].id===id){
+      while (index < userCurrentOrder.length) {
+        if(userCurrentOrder[index].id===id){
           // console.log("FOUND THE ID");
           locationFound=index;
-          index=produceListItems.length;
+          index=userCurrentOrder.length;
+        }
+        index++;
+      }//end of while loop
+
+      console.log("it was found in location ", locationFound)
+      return locationFound;
+    }
+
+    const findQtyInUserCurrentOrder=(id)=>{
+      let index=0;
+      let locationFound;
+
+      while (index < userCurrentOrder.length) {
+        if(userCurrentOrder[index].id===id){
+          // console.log("FOUND THE ID");
+          locationFound=index;
+          index=userCurrentOrder.length
         }
         index++;
       }//end of while loop
@@ -133,24 +158,31 @@ export default function produceorder() {
       let produceItemLocation;
       let currentQty;
       
+      console.log("value is ", value)
 
       
       //TODO:First find the produce item by using the id
       produceItemLocation=findProduceItem(id)
       //TODO:Get the current value of the Quantity
-      currentQty=produceListItems[produceItemLocation].Qty;
+      currentQty=userCurrentOrder[produceItemLocation].Qty;
       console.log("For id", id, ", and it's Quantity is ", currentQty)
       //TODO:Increase the value of Quantity
       currentQty=currentQty+1
       // console.log(currentQty)
       console.log("produceItemLocation is ", produceItemLocation)
       //TODO:Update Quantity
-        const updateItems=[...produceListItems];
+        const updateItems=[...userCurrentOrder];
+        console.log(updateItems)
         updateItems[produceItemLocation].Qty=currentQty;
-        // setUserCurrentOrder(updateItems);
-        setProduceListItems(updateItems);
-        console.log(updateItems[id].Qty)
-        getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
+        // setProduceListItems(updateItems);
+        const updatedOrder = userCurrentOrder.map(item =>
+          item.id === id ? { ...item, Qty: Number(currentQty) } : item
+        );
+        updateUserOrder(updatedOrder);
+        console.log(updateItems)
+        console.log("id is ", id)
+        console.log(updateItems[produceItemLocation].Qty)
+        getCurrentBalance(updateItems[produceItemLocation].Qty,case_cost,promoPrice,stock,index,id)
         
     }
 
@@ -160,33 +192,60 @@ export default function produceorder() {
       let currentQty;
       let newOrderList;
       let newOrderProduceList;
+      let qtyLocation
+      let tempValueQty=0
 
+      console.log("Qty is ", qtyTotal)
+      console.log("id is ", id)
+
+      // if (qtyTotal===undefined) {
+      //   console.log(userCurrentOrder)
+      //   qtyLocation=findQtyInUserCurrentOrder(id)
+
+      //   console.log("qtyLocation is ", qtyLocation)
+      //    tempValueQty=getQty(qtyLocation)
+
+      //    console.log("tempValueQty is ", tempValueQty)
+
+      //   //TODO: AT THIS POINT I HAVE THE QUANTITY VALUE FROM THE CURRENT PRODUCE ITEM
+
+      // }
       //TODO:First find the produce item by using the id
       produceItemLocation=findProduceItem(id)
       //TODO:Get the current value of the Quantity
-      currentQty=produceListItems[produceItemLocation].Qty;
+      console.log(userCurrentOrder)
+      console.log(userCurrentOrder[produceItemLocation].Qty,", ", userCurrentOrder, "prodcuceItemLocation is ", produceItemLocation)
+      currentQty=userCurrentOrder[produceItemLocation].Qty;
       console.log("For id", id, ", and it's Quantity is ", currentQty)
       //TODO:Decrease the value of Quantity
       currentQty=currentQty-1
       if (currentQty===0) {
-        const updateItems=[...produceListItems];
+        const updateItems=[...userCurrentOrder];
         updateItems[produceItemLocation].Qty=currentQty;
-        setProduceListItems(updateItems);
+        // setProduceListItems(updateItems);
+        const updatedOrder = userCurrentOrder.map(item =>
+          item.id === id ? { ...item, Qty: Number(currentQty) } : item
+        );
+        updateUserOrder(updatedOrder);
         // console.log("At this point valueQty should be ZERO, ", valueQty);
-        setUserCurrentOrder(currentItems=>{
-          newOrderProduceList=currentItems.filter(item=>item.id !== id);
-          console.log("updated items:", newOrderProduceList)
-          getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
+        // setUserCurrentOrder(currentItems=>{
+        //   newOrderProduceList=currentItems.filter(item=>item.id !== id);
+        //   console.log("updated items:", newOrderProduceList)
+        //   getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
 
-          return newOrderProduceList;
-        })
+        //   return newOrderProduceList;
+        // })
       }else{
         console.log("produceItemLocation is ", produceItemLocation)
         //TODO:Update Quantity
-          const updateItems=[...produceListItems];
+          const updateItems=[...userCurrentOrder];
           updateItems[produceItemLocation].Qty=currentQty;
-          setProduceListItems(updateItems);
-          getCurrentBalance(updateItems[id].Qty,case_cost,promoPrice,stock,index,id)
+          // setProduceListItems(updateItems);
+          const updatedOrder = userCurrentOrder.map(item =>
+            item.id === id ? { ...item, Qty: Number(currentQty) } : item
+          );
+          updateUserOrder(updatedOrder);
+          getCurrentBalance(updateItems[produceItemLocation].Qty,case_cost,promoPrice,stock,index,id)
       }
 
 
@@ -219,8 +278,9 @@ export default function produceorder() {
     console.log("currentValue is ", parseFloat(currentValue).toFixed(2))
 
 
-    setTotalBalance(currentValue)
+    // setTotalBalance(currentValue)
 
+    updateTotalBalance(currentValue)
 
   }
 
@@ -360,6 +420,7 @@ export default function produceorder() {
           <div className='grid grid-rows-1 border border-gray-400 mt-8 w-10/12 rounded bg-blue-50'>
             <div className='grid grid-rows-1 mt-2  w-11/12 sm:mt-4 ml-4 mb-10 md:mb-12 lg:mb-4 rounded lg:ml-10 bg-white'>
               <div className='p-4'>
+                {console.log(userCurrentOrder)}
                   {userCurrentOrder.map((item,index)=>
                       isSmallScreen===false ? (
                       <div key={item.id}>

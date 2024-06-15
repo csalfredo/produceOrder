@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MenuItem, Select, TextField, Menu} from '@mui/material';
+import { MenuItem, Select, TextField, Menu, Button} from '@mui/material';
 import {styled } from "@mui/material/styles"
+import { useProduce } from './context/ProduceContext';
 
 const CustomMenu = styled(Menu)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -10,36 +11,49 @@ const CustomMenu = styled(Menu)(({ theme }) => ({
 }));
 
 
-const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }) => {
+const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems,outStock }) => {
   const [quantity, setQuantity] = useState('');
   const [isCustomQuantity, setIsCustomQuantity] = useState(false);
+  const [customQty, setCustomQty]=useState(false)
+  const { updateProduceList, userCurrentOrder, updateUserOrder, updateTotalBalance, totalBalance } = useProduce();
 
-  console.log("index is ", index, ", and id is ", id)
+  console.log("outStock is ", outStock)
+
+  const toggleCustomQty=()=>{
+    setCustomQty(!customQty)
+  }
 
   const handleQuantityChange = (event) => {
-
     const value = event.target.value;
 
     console.log("value is ", value)
 
+    // //TODO:THIS INDICATES IF 
+    // updateQntySelector();
+    
     if (value === '10+') {
+      toggleCustomQty()
       setIsCustomQuantity(true);
       setQuantity('');
-      onQuantityChange('',index); // Notify parent of empty selection
+      onQuantityChange('',index,id); // Notify parent of empty selection
     } else if(value===0){
         removeItem(index)
     }
     else {
       setIsCustomQuantity(false);
       setQuantity(value);
-      onQuantityChange(value,index); // Notify parent of the selected quantity
+      onQuantityChange(value,index,id); // Notify parent of the selected quantity
     }
   };
 
   const handleCustomQuantityChange = (event) => {
     const value = event.target.value;
+
+    console.log(value)
+
     setQuantity(value);
-    onQuantityChange(value,index); // Notify parent of the custom quantity
+    // setIsCustomQuantity(false)
+    onQuantityChange(value,index,id); // Notify parent of the custom quantity
   };
 
   const getValue=()=>{
@@ -48,10 +62,18 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }
     return produceItems[index].Qty
   }
 
+  const updateQty=()=>{
+    toggleCustomQty()
+  }
+
   return (
     <div className='flex justify-center items-center'>
+
       {console.log("quantity is ", quantity.length)}
-      {!isCustomQuantity ? (
+
+      {outStock===false ? <p className='text-orange-500 font-bold text-sm'>OUT OF STOCK</p> 
+        : 
+        !isCustomQuantity ? (
         <Select
           value={quantity.length===0 ? getValue() : quantity}
           onChange={handleQuantityChange}
@@ -77,18 +99,23 @@ const QuantitySelector = ({ onQuantityChange, removeItem,index,id,produceItems }
           <MenuItem value="10+">10+</MenuItem>
         </Select>
       ) : (
-        <TextField
-          value={quantity}
-          onChange={handleCustomQuantityChange}
-          placeholder="Qty"
-          className="border border-gray-300 rounded"
-          sx={{
-            width:"45%",
-            fontSize: '1.20rem',
-          
-          }}
+          <TextField
+            value={quantity}
+            onChange={handleCustomQuantityChange}
+            placeholder="Qty"
+            className="border border-gray-300 rounded"
+            sx={{
+              width:"45%",
+              fontSize: '1.20rem',
+            
+            }}
         />
       )}
+      <div className='ml-2'>
+        {customQty===true &&
+          <Button onClick={updateQty} className='text-black bg-yellow-500 rounded-xl text-sm/[14px] hover:bg-yellow-600'>UPDATE</Button>
+        }
+      </div>
     </div>
   );
 };

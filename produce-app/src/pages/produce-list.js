@@ -1,6 +1,7 @@
 // pages/produce-list.js
 import React, {useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useProduce } from './context/ProduceContext';
 import { useSwitch } from '@nextui-org/react';
 import { Stack, Autocomplete, TextField, Button, MenuItem, Select } from "@mui/material"
 import queryString from 'query-string';
@@ -8,6 +9,7 @@ import { Questrial } from 'next/font/google';
 import QuantitySelector from './QuantitySelector';
 
 const ProduceList = () => {
+  const { updateProduceList, userCurrentOrder, updateUserOrder, updateTotalBalance, totalBalance } = useProduce();
   const router = useRouter();
   // const { order } = router.query;
   const [produceItems, setProduceItems] = useState([])
@@ -30,6 +32,7 @@ const ProduceList = () => {
   let total=0.000
   let totalQ=0
 
+  console.log("userCurrentOrder is ", userCurrentOrder)
 
   useEffect(()=>{
     const parsed=queryString.parse(window.location.search)
@@ -61,11 +64,23 @@ const ProduceList = () => {
   
   }, [])
 
-  const handleQuantityChange = (quantity,index) => {
-    setSelectedQuantity(quantity);
-    console.log('Selected Quantity:', quantity, ",and index is ", index);
+  const handleQuantityChange = (quantity,index,id) => {
+    // setSelectedQuantity(quantity);
+    // console.log('Selected Quantity:', quantity, ",and index is ", index);
+
+    // produceItems[index].Qty=quantity
+
+    console.log("quantity is ", quantity, ",and is ", id)
+
+    const updatedOrder = produceItems.map(item =>
+      item.id === id ? { ...item, Qty: Number(quantity) } : item
+    );
+    updateUserOrder(updatedOrder);
 
     produceItems[index].Qty=quantity
+
+    
+
 
   }
 
@@ -183,6 +198,8 @@ const ProduceList = () => {
     getQuantity()
     //TODO:CALCULATE TOTAL
     calculateTotal();
+
+    updateTotalBalance(total)
     return total
   }
 
@@ -261,7 +278,8 @@ const ProduceList = () => {
   const deleteRecord=(index)=>{
     let tempID=produceItems[index].id
 
-    setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
+    // setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
+    updateUserOrder(prevItems=>prevItems.filter(item=>item.id !== tempID))
 
   }
 
@@ -295,6 +313,7 @@ const ProduceList = () => {
     let tempID=produceItems[index].id
 
     setProduceItems(prevItems=>prevItems.filter(item=>item.id !== tempID))
+    // updateUs(prevItems=>prevItems.filter(item=>item.id !== tempID))
   };
 
   const submitOrder=()=>{
@@ -312,7 +331,7 @@ const ProduceList = () => {
         </div>
       <div>
       {listItems.length > 0 && removeOutStocks()}
-        {produceItems.map((item, index) => (
+        {userCurrentOrder.map((item, index) => (
           <div key={item.id} className="mb-2">
               <div className="flex justify-center items-center">
                 <div className={`border border-black w-5/12 rounded-md ${item.stock===false ? 'bg-gray-300' : 'bg-white'}`}>
@@ -320,7 +339,7 @@ const ProduceList = () => {
                 {/* TODO: */}
                   <div className='grid grid-rows-1 border border-green-500'>
                     <div className='grid grid-cols-4'>
-                    <div className='border border-red-700 flex justify-center items-center'>  
+                    <div className='flex justify-center items-center'>  
                       <p className={`uppercase font-bold text-sm font-instrument ${item.stock===false && 'text-gray-500'}`}>{item.name}</p>
                     </div>
                   <div>
@@ -329,7 +348,8 @@ const ProduceList = () => {
                                 removeItem={handleDelete}
                                 index={index}
                                 id={item.id}
-                                produceItems={produceItems}
+                                produceItems={userCurrentOrder}
+                                outStock={item.stock}
                               />                        
                             {/* {
                               selectedQuantity !== '' && (
@@ -342,11 +362,10 @@ const ProduceList = () => {
                       </div>
                   </div>
                   <div className='grid grid-rows-1'>
-                      <div className='flex justify-center items-center'>
-                        {deleteButtonIndex===index ?
-                            <Button className='border border-black bg-gray-500 hover:bg-gray-600'
-                              onClick={()=>clearProgress(index)}
-                            sx={{
+                    <div className='flex justify-center items-center'>
+                      <div className=''>
+                        <Button className='border border-black hover:bg-red-600' onClick={()=>deleteRecord(index)}
+                          sx={{
                                 fontSize: '0.75rem', // smaller font size
                                 padding: '2px 8px', // custom padding
                                 minWidth: '42px', // minimum width
@@ -354,57 +373,59 @@ const ProduceList = () => {
                                 background: '#FF6347',
                                 color: 'white'
                               }}
-                                variant='outlined' 
-                                color='primary' 
-                                size='small' 
-                                >CANCEL</Button>
-                              :
-                            <div className=''>
-                              <Button className='border border-black' onClick={()=>deleteRecord(index)}
-                              sx={{
-                                  fontSize: '0.75rem', // smaller font size
-                                  padding: '2px 8px', // custom padding
-                                  minWidth: '42px', // minimum width
-                                  height: '30px' ,// specific height
-                                  background: '#FF6347',
-                                  color: 'white'
-                                }}
-                                  variant='outlined' 
-                                  color='primary' 
-                                  size='small' 
-                                  disabled={item.stock===false && true}
-                                  >Delete</Button>
-                            </div>
-
-                        }
-
+                              variant='outlined' 
+                              color='primary' 
+                              size='small' 
+                              disabled={item.stock===false && true}
+                              >Delete</Button>
                       </div>
-                  </div>
-                  </div>
-                  </div>
-                  {/* TODO: */}
+                    </div>
+                </div>
                 </div>
               </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
+      <div className='flex items-center justify-center'>
+        <div className='w-5/12'>
+          <div className='w-9/12'>
+            <div className='flex justify-center'>
+              <p className='font-bold font-instrument'>QTY: {getTotalQuantity()}</p>
+          </div>
+        </div>
+        <div className='flex justify-center mb-4'>
+          <p className='font-bold font-instrument'>TOTAL: ${parseFloat(getTotal()).toFixed(2)}</p>
+        </div>
       <div className='flex justify-center'>
-        <p className='font-bold font-instrument'>CASE QUANTITY: {getTotalQuantity()}</p>
-      </div>
-      <div className='flex justify-center mb-4'>
-        <p className='font-bold font-instrument'>TOTAL: ${parseFloat(getTotal()).toFixed(2)}</p>
-      </div>
-      <div className='flex justify-center'>
-        <Button className='border border-black mb-2 hover:bg-teal-500' onClick={submitOrder}
-          sx={{
-            fontSize: '0.75rem', // smaller font size
-            padding: '2px 8px', // custom padding
-            minWidth: '42px', // minimum width
-            height: '30px' ,// specific height
-            background: '#007BFF',
-            color: 'white'
-        }}
-        >SUBMIT</Button>
+          <div className='mr-2'>
+            <Button className='border border-black mb-2 hover:bg-teal-500' onClick={submitOrder}
+              sx={{
+                fontSize: '0.75rem', // smaller font size
+                padding: '2px 8px', // custom padding
+                minWidth: '42px', // minimum width
+                height: '30px' ,// specific height
+                background: '#007BFF',
+                color: 'white'
+            }}
+            >SUBMIT</Button>
+          </div>
+          <div className='flex justify-center'>
+            <Button className='border border-black mb-2 hover:bg-teal-500' onClick={()=>router.push('/produceorder')}
+              sx={{
+                fontSize: '0.75rem', // smaller font size
+                padding: '2px 8px', // custom padding
+                minWidth: '42px', // minimum width
+                height: '30px' ,// specific height
+                background: '#007BFF',
+                color: 'white'
+            }}
+            >MODIFY ORDER</Button>
+          </div>
+        </div>
+        </div>
+
       </div>
     </div>
   );
