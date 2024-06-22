@@ -7,6 +7,8 @@ import { Stack, Autocomplete, TextField, Button, MenuItem, Select } from "@mui/m
 import queryString from 'query-string';
 import { Questrial } from 'next/font/google';
 import QuantitySelector from './QuantitySelector';
+import SendEmail from './SendEmail';
+import axios from 'axios';
 
 const ProduceList = () => {
   const { updateProduceList, userCurrentOrder, updateUserOrder, updateTotalBalance, totalBalance } = useProduce();
@@ -23,7 +25,9 @@ const ProduceList = () => {
   const [isDisabled, setIsDisabled]=useState(false)
   const [quantity, setQuantity]=useState('')
   const [isCustomQuantity,setIsCustomQuantity]=useState(false)
-  const [selectedQuantity, setSelectedQuantity] = useState('');
+  const [selectedQuantity, setSelectedQuantity] = useState('')
+  const [submitButton, setSubmitButton]=useState(false)
+
 
 
   let quantityItems=[]
@@ -64,6 +68,10 @@ const ProduceList = () => {
   
   }, [])
 
+  const toggleSubmitButton=()=>{
+    setSubmitButton(!submitButton)
+
+  }
   const handleQuantityChange = (quantity,index,id) => {
     // setSelectedQuantity(quantity);
     // console.log('Selected Quantity:', quantity, ",and index is ", index);
@@ -316,9 +324,31 @@ const ProduceList = () => {
     // updateUs(prevItems=>prevItems.filter(item=>item.id !== tempID))
   };
 
-  const submitOrder=()=>{
+  const submitOrder= async(event)=>{
+    console.log(event)
     console.log(produceItems)
     console.log(quantity)
+    console.log(userCurrentOrder)
+
+    // Transform produceItems to match backend expectation
+    const items = produceItems.map(item => ({
+      name: item.name,
+      quantity: item.Qty,
+      case_cost: item.case_cost,
+      total: totalBalance,
+  }));
+
+
+
+  try {
+      const response = await axios.post('http://127.0.0.1:8000/api/send-order', { items });
+      console.log('Response:', response);
+      alert('Order sent successfully!');
+  } catch (error) {
+      console.error('There was an error sending the order!', error);
+  }
+
+    toggleSubmitButton()
   }
 
   return (
@@ -424,6 +454,12 @@ const ProduceList = () => {
             >MODIFY ORDER</Button>
           </div>
         </div>
+        </div>
+        <div>
+        {console.log(submitButton)}
+            {submitButton && 
+              <SendEmail />
+            }
         </div>
 
       </div>
