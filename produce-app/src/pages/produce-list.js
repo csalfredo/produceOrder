@@ -7,6 +7,7 @@ import { Stack, Autocomplete, TextField, Button, MenuItem, Select } from "@mui/m
 import queryString from 'query-string';
 import { Questrial } from 'next/font/google';
 import QuantitySelector from './QuantitySelector';
+import SendEmail from './SendEmail';
 import axios from 'axios';
 
 const ProduceList = () => {
@@ -454,6 +455,13 @@ const ProduceList = () => {
           </div>
         </div>
         </div>
+        <div>
+        {/* {console.log(submitButton)}
+            {submitButton && 
+              <SendEmail />
+            } */}
+        </div>
+
       </div>
     </div>
   );
