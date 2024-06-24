@@ -33,7 +33,7 @@
         li {
             background: #f4f4f4;
             margin: 5px 0;
-            padding: 10px;
+            padding: 6px;
             border-radius: 4px;
             display: flex;
         }
@@ -50,6 +50,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-size: 12px;
         }
         .item-quantity, .item-cost {
             font-style: italic;
@@ -57,17 +58,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-size: 10px;
         }
         .quantityName{
             text-align: center;
             font-weight: bold;
             width: 25%;
+            font-size: 14px;
             
         }
         .caseCostName{
             font-weight: bold;
             text-align: center;
             width: 40%;
+            font-size: 14px;
           
         }
         .item-cost{
@@ -77,6 +81,7 @@
             width: 20%;
             font-weight: bold;
             text-align: center;
+            font-size: 14px;
         }
         .titleHeader{
             display: flex;
